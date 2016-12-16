@@ -1,0 +1,20 @@
+---
+- hosts: all
+  sudo: True
+  tasks: 
+    - name: copy files to /usr/local/bin
+      copy:
+        src: "{{ item }}"
+        dest: /usr/local/bin/
+        owner: root
+        mode: 0555
+      with_fileglob:
+        - files/bin/*
+    - name: copy files to /usr/local/sbin
+      copy:
+        src: "{{ item }}"
+        dest: /usr/local/sbin/
+        owner: root
+        mode: 0555
+      with_fileglob:
+        - files/sbin/*
