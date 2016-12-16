@@ -1,54 +1,63 @@
----
-- hosts: all
-  sudo: True
+--- 
+- 
+  handlers: 
+    - 
+      name: "restart apache"
+      service: "name=apache2 state=restarted"
+  hosts: all
+  sudo: true
   tasks: 
-    - name: copy files to /usr/local/bin
-      copy:
-        src: "{{ item }}"
+    - 
+      copy: 
         dest: /usr/local/bin/
+        mode: 365
         owner: root
-        mode: 0555
-      with_fileglob:
+        src: "{{ item }}"
+      name: "copy files to /usr/local/bin"
+      with_fileglob: 
         - files/bin/*
-    - name: copy files to /usr/local/sbin
-      copy:
-        src: "{{ item }}"
+    - 
+      copy: 
         dest: /usr/local/sbin/
+        mode: 365
         owner: root
-        mode: 0555
-      with_fileglob:
+        src: "{{ item }}"
+      name: "copy files to /usr/local/sbin"
+      with_fileglob: 
         - files/sbin/*
-    - name: copy perl scripts to /usr/lib/cgi-bin/sites/
-      copy:
-        src: "{{ item }}"
+    - 
+      copy: 
         dest: /usr/lib/cgi-bin/sites/
+        mode: 493
         owner: root
-        mode: 0755
-      with_fileglob:
+        src: "{{ item }}"
+      name: "copy perl scripts to /usr/lib/cgi-bin/sites/"
+      with_fileglob: 
         - files/www/*.pl
-    - name: copy script templates to /usr/lib/cgi-bin/sites/
-      copy:
-        src: "{{ item }}"
+    - 
+      copy: 
         dest: /usr/lib/cgi-bin/sites/
+        mode: 420
         owner: root
-        mode: 0644
-      with_fileglob:
+        src: "{{ item }}"
+      name: "copy script templates to /usr/lib/cgi-bin/sites/"
+      with_fileglob: 
         - files/www/*.tt
-    - name: copy apache conf file to /etc/apache2/sites-available/ 
-      copy:
-        src: files/apache/000-bwsdev
+    - 
+      copy: 
         dest: /etc/apache2/sites-available/000-bwsdev
+        mode: 420
         owner: root
-        mode: 0644
-      notify:
-        - restart apache
-    - name: symlink apache to /etc/apache2/sites-enabled
-      file:
-        src: /etc/apache2/sites-available/000-bwsdev
+        src: files/apache/000-bwsdev
+      name: "copy apache conf file to /etc/apache2/sites-available/"
+      notify: 
+        - "restart apache"
+    - 
+      file: 
         dest: /etc/apache2/sites-enabled/000-bwsdev
+        src: /etc/apache2/sites-available/000-bwsdev
         state: link
-      notify:
-        - restart apache
-  handlers:
-    - name: restart apache
-      service: name=apache2 state=restarted
+      name: "symlink apache to /etc/apache2/sites-enabled"
+      notify: 
+        - "restart apache"
+
