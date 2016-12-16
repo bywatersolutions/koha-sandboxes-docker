@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+
+        <title>ByWater Solutions Testing Sites</title>
+
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+        <style type="text/css">
+            td {
+                font-family: sans-serif;
+                font-size: small;
+            }
+            th {
+                font-family: sans-serif;
+            }
+        </style>
+
+
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                var bot_url = "/cgi-bin/sites/devbot.pl";
+                var name_email = $.cookie('user-full-name') + " <" + $.cookie('user-email-address') + ">";
+
+                if ( ! $.cookie('user-full-name') ) {
+                    $('#personal-info-model').modal();
+                    $('#personal-info-model').on('shown.bs.modal', function () {
+                        $('#user-full-name').focus();
+                    });
+                } else {
+                    var msg = name_email + " has entered the testing site.";
+                    $.get( bot_url, { message: msg } ); 
+                }
+
+                $('#personal-info-modal-submit').on('click', function(){
+                    if ( ! $('#user-full-name').val() ) {
+
+                    }
+                    else if ( ! $('#user-email-address').val() ) {
+
+                    }
+                    else {
+                        $.cookie('user-full-name', $('#user-full-name').val(), { expires: 30 });
+                        $.cookie('user-email-address', $('#user-email-address').val(), { expires: 30 });
+                        $('#personal-info-model').modal('hide');
+
+                        name_email = $.cookie('user-full-name') + " <" + $.cookie('user-email-address') + ">";
+                        var msg = name_email + " has entered the testing site for the very first time!";
+                        $.get( bot_url, { message: msg } ); 
+                    }
+                });
+
+            });
+        </script>
+    </head>
+
+    <body>
+        <!-- Modal -->
+        <div class="modal fade" id="personal-info-model" tabindex="-1" role="dialog" aria-labelledby="personal-info-model-label" aria-hidden="true"  data-backdrop="static">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="personal-info-model-label">Hello there!</h4>
+              </div>
+              <div class="modal-body">
+                  <p>It looks like you haven't visited here before! Would you mind telling us a bit about yourself?</p>
+
+                  <div class="form-group">
+                    <label for="user-full-name">Full name</label>
+                    <input type="text" class="form-control" id="user-full-name" placeholder="Enter full name">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="user-email-address">Email address</label>
+                    <input type="email" class="form-control" id="user-email-address" placeholder="Enter email">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button id="personal-info-modal-submit" type="button" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <table class="table">
+            <tr>
+                <td valign=top width=30%>
+                    <img src="http://media.bywatersolutions.com/logo/bwlogo.jpg">
+                </td>
+                <td>
+                    <h1>Testing Sites</h1>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-striped table-bordere table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Notes</th>
+                    <th>Version</th>
+                    <th>Specialist</th>
+                    <th>Staff</th>
+                    <th>OPAC</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+                [% FOREACH i IN instances %]
+                    [% SET sites = i.value %]
+                    <tr>
+                        <th colspan="99">
+                            [% IF i.key == 'migration' %]
+                                Migration
+                            [% ELSIF i.key == 'opac' %]
+                                OPAC
+                            [% ELSIF i.key == 'test' %]
+                                Testing
+                            [% ELSIF i.key == 'dev' %]
+                                Development
+                            [% ELSE %]
+                                [% i.key %]
+                            [% END %]
+                        </th>
+                    </tr>
+
+
+                    [% FOREACH s IN sites %]
+                        [% SET site = s.value %]
+                        <tr>
+                            <td>[% site.name %]</td>
+                            <td>[% site.description %]</td>
+                            <td>[% site.notes %]</td>
+                            <td>[% site.version %]</td>
+                            <td>[% site.specialist %]</td>
+                            <td>
+                                [% FOREACH link IN site.staff %]
+                                    <p><a href="http://[% link.ServerName %]">[% link.ServerName %]</a></p>
+                                [% END %]
+                            </td>
+                            <td>
+                                [% FOREACH link IN site.opac %]
+                                    <p><a href="http://[% link.ServerName %]">[% link.ServerName %]</a></p>
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+
+                [% END %]
+            </tbody>
+        </table>
+    </body>
+</html>
