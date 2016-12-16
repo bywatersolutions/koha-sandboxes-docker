@@ -18,3 +18,19 @@
         mode: 0555
       with_fileglob:
         - files/sbin/*
+    - name: copy perl scripts to /usr/lib/cgi-bin/sites/
+      copy:
+        src: "{{ item }}"
+        dest: /usr/lib/cgi-bin/sites/
+        owner: root
+        mode: 0755
+      with_fileglob:
+        - files/www/*.pl
+    - name: copy script templates to /usr/lib/cgi-bin/sites/
+      copy:
+        src: "{{ item }}"
+        dest: /usr/lib/cgi-bin/sites/
+        owner: root
+        mode: 0644
+      with_fileglob:
+        - files/www/*.tt
