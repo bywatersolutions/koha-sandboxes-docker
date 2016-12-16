@@ -34,3 +34,21 @@
         mode: 0644
       with_fileglob:
         - files/www/*.tt
+    - name: copy apache conf file to /etc/apache2/sites-available/ 
+      copy:
+        src: files/apache/000-bwsdev
+        dest: /etc/apache2/sites-available/000-bwsdev
+        owner: root
+        mode: 0644
+      notify:
+        - restart apache
+    - name: symlink apache to /etc/apache2/sites-enabled
+      file:
+        src: /etc/apache2/sites-available/000-bwsdev
+        dest: /etc/apache2/sites-enabled/000-bwsdev
+        state: link
+      notify:
+        - restart apache
+  handlers:
+    - name: restart apache
+      service: name=apache2 state=restarted
