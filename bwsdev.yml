@@ -19,6 +19,9 @@
     -
       name: "update koha git repo"
       command: cd /usr/local/src/koha && yes | git fetch --all
+    -
+      name: "make koha-gitify executable"
+      command: chmod +x /usr/local/src/koha-gitify
   hosts: all
   sudo: true
   tasks: 
@@ -29,6 +32,13 @@
         accept_hostkey: yes
       notify: 
         - "install koha git config"
+    - name: "Clone koha-gitify source to /usr/local/src/koha-gitify"
+      git:
+        repo: git://github.com/mkfifo/koha-gitify.git
+        dest: /usr/local/src/koha-gitify
+        accept_hostkey: yes
+      notify:
+        - "make koha-gitify executable"
     - name: "install sshfs"
       apt:
         name: sshfs
