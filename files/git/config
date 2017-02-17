@@ -1,0 +1,23 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git://git.koha-community.org/koha.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[remote "bws-production"]
+	url = https://github.com/bywatersolutions/bywater-koha.git
+	fetch = +refs/heads/*:refs/remotes/bws-production/*
+[remote "bws-production-push"]
+	url = git@github.com:bywatersolutions/bywater-koha.git
+	fetch = +refs/heads/*:refs/remotes/bws-production-push/*
+[remote "bws-devel"]
+	url = https://github.com/bywatersolutions/bywater-koha-devel.git
+	fetch = +refs/heads/*:refs/remotes/bws-devel/*
+[remote "bws-devel-push"]
+	url = git@github.com:bywatersolutions/bywater-koha-devel.git
+	fetch = +refs/heads/*:refs/remotes/bws-devel-push/*

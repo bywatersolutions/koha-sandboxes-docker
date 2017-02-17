@@ -4,6 +4,21 @@
     - 
       name: "restart apache"
       service: "name=apache2 state=restarted"
+    - 
+      name: "restart apache"
+      service: "name=apache2 state=restarted"
+    -
+      name: "install koha git config"
+      copy: 
+        dest: /usr/local/src/koha/.git/config
+        mode: 365
+        owner: root
+        src: files/git/config
+      notify:
+        - "update koha git repo"
+    -
+      name: "update koha git repo"
+      command: cd /usr/local/src/koha && yes | git fetch --all
   hosts: all
   sudo: true
   tasks: 
@@ -12,6 +27,8 @@
         repo: git://git.koha-community.org/koha.git
         dest: /usr/local/src/koha
         accept_hostkey: yes
+      notify: 
+        - "install koha git config"
     - name: "install sshfs"
       apt:
         name: sshfs
