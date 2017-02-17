@@ -89,7 +89,7 @@ if ($gitify) {
 
     # Gitify the site
     say "Running koha-gitify" if $verbose;
-    `/usr/local/src/koha-gitify $site_name $kohaclone`;
+    `/usr/local/src/koha-gitify/koha-gitify $site_name $kohaclone`;
 
     # Checkout the given branch if supplied, else master
     if ( $git_branch ) {
