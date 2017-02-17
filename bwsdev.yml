@@ -1,16 +1,27 @@
 --- 
 - 
   handlers: 
-    - name: "install sshfs"
-      apt:
-        name: sshfs
-           update_cache: yes
     - 
       name: "restart apache"
       service: "name=apache2 state=restarted"
   hosts: all
   sudo: true
   tasks: 
+    - name: "Clone koha source to /usr/local/src/koha"
+      git:
+        repo: git://git.koha-community.org/koha.git
+        dest: /usr/local/src/koha
+        accept_hostkey: yes
+    - name: "install sshfs"
+      apt:
+        name: sshfs
+        state: present
+        update_cache: yes
+    - name: "install fuse"
+      apt:
+        name: fuse
+        state: present
+        update_cache: yes
     - 
       copy: 
         dest: /usr/local/bin/

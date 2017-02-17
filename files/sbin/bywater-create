@@ -72,7 +72,7 @@ if ($gitify) {
 
     # Copy the default kohaclone to the site directory
     say "Cloning default kohaclone to $kohaclone" if $verbose;
-    `git clone -l -s --progress /home/koha/kohaclone $kohaclone`;
+    `git clone -l -s --progress /usr/local/src/koha $kohaclone`;
     say "CLONE: $kohaclone";
     say "Adding remote 'community'" if $verbose;
     `cd $kohaclone && git remote add community git://git.koha-community.org/koha.git`;
