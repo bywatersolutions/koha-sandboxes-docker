@@ -1,0 +1,23 @@
+#!/bin/sh
+
+SCRIPTNAME=bywater-mount-backups
+REMOTEDIR='kyle@bwsbackups:/home/backups/backups'
+MNTPOINT=/mnt/bwsbackups
+
+case "$1" in
+  start)
+    echo "Mounting bwsbackups folder . . ."
+    # Note - Add debug, -d, as an option will force the job to foreground, and you can't exit the terminal. --lrb
+    sshfs -o ro,allow_other,uid=1200,gid=1200,follow_symlinks,reconnect -o ServerAliveInterval=15 $REMOTEDIR $MNTPOINT
+    ;;
+  stop)
+    fusermount -u $MNTPOINT
+    ;;
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
