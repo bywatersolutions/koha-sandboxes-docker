@@ -1,6 +1,0 @@
-#!/bin/bash
-koha-remove-force $1
-rm -rf /var/lib/koha/$1
-rm -rf /etc/koha/sites/$1
-rm -rf /etc/sudoers.d/$1-koha
-rm -rf /var/spool/koha/$1

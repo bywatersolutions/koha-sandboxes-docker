@@ -1,0 +1,71 @@
+--- 
+- 
+  handlers: 
+    - 
+      name: "Restart apache"
+      service: "name=apache2 state=restarted"
+    - 
+      name: "Enable apache site"
+      shell: a2ensite {{ instance_name }}
+      notify:
+        - "Restart apache"
+    -
+      name: "Install koha git config"
+      copy: 
+        dest: /usr/local/src/koha/.git/config
+        mode: 365
+        owner: root
+        src: files/git/config
+      notify:
+        - "Update koha git repo"
+    -
+      name: "Update koha git repo"
+      shell: "cd /usr/local/src/koha && yes | git fetch --all"
+    -
+      name: "Update koha git repo for sandbox"
+      shell: "cd /usr/local/src/koha-sandboxes/{{ instance_name }} && yes | git fetch --all"
+  hosts: all
+  become: true
+  tasks: 
+    - debug:
+        msg: "Using '{{ instance_name }}' as instance name"
+
+    - name: "Clone koha source to /usr/local/src/koha"
+      git:
+        repo: git://git.koha-community.org/koha.git
+        dest: /usr/local/src/koha
+        accept_hostkey: yes
+        update: yes
+      notify: 
+        - "Install koha git config"
+    - name: "Copy source koha clone for sandbox"
+      shell: "[ -d /usr/local/src/koha-sandboxes/{{ instance_name }} ] || git clone -l -s --progress /usr/local/src/koha /usr/local/src/koha-sandboxes/{{ instance_name }}"
+      ignore_errors: yes
+    - name: "Install koha git config for sandbox"
+      copy: 
+        dest: /usr/local/src/koha-sandboxes/{{ instance_name }}/.git/config
+        mode: 365
+        owner: root
+        src: files/git/config
+      notify:
+        - "Update koha git repo for sandbox"
+
+    - name: "Launch sandbox instance via docker-compose"
+      shell: SYNC_REPO=/usr/local/src/koha-sandboxes/{{ instance_name }}/ docker-compose -f /usr/local/src/koha-testing-docker/docker-compose.yml -p sandbox{{ instance_name }} up -d
+
+    - name: "Get host port for sandbox staff port"
+      shell: docker port sandbox{{ instance_name }}_koha_1 | grep 8080 | rev | cut -d":" -f1 | rev
+      register: docker_port_intranet
+    - debug:
+        msg: "Using '{{ docker_port_intranet.stdout }}' as staff port"
+    - name: "Get host port for sandbox opac port"
+      shell: docker port sandbox{{ instance_name }}_koha_1 | grep 8081 | rev | cut -d":" -f1 | rev
+      register: docker_port_opac
+    - debug:
+        msg: "Using '{{ docker_port_opac.stdout }}' as opac port"
+
+    - name: "Install apache config for sandbox instance"
+      template:
+        src: templates/sandbox_instance.j2
+        dest: /etc/apache2/sites-enabled/{{ instance_name }}.conf
+      notify: "Install koha git config"

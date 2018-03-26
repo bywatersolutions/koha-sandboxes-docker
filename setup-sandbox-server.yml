@@ -1,0 +1,57 @@
+--- 
+- 
+  handlers: 
+    - 
+      name: "Restart apache"
+      service: "name=apache2 state=restarted"
+    -
+      name: "Install koha git config"
+      copy: 
+        dest: /usr/local/src/koha/.git/config
+        mode: 365
+        owner: root
+        src: files/git/config
+        update: yes
+      notify:
+        - "Update koha git repo"
+    -
+      name: "Update koha git repo"
+      command: cd /usr/local/src/koha && yes | git fetch --all
+  hosts: all
+  become: true
+  tasks: 
+    - name: Install "git" package
+      apt:
+        name: git
+#        update_cache: yes
+
+    - name: Install "apache2" package
+      apt:
+        name: apache2
+    - name: Enable mod proxy for apache2
+      apache2_module:
+        state: present
+        name: proxy
+
+    - name: "Clone koha source to /usr/local/src/koha"
+      git:
+        repo: git://git.koha-community.org/koha.git
+        dest: /usr/local/src/koha
+        accept_hostkey: yes
+      notify: 
+        - "Install koha git config"
+
+    - name: "Clone koha-testing-docker source to /usr/local/src/koha-testing-docker"
+      git:
+        repo: https://gitlab.com/koha-community/koha-testing-docker.git
+        dest: /usr/local/src/koha-testing-docker
+        accept_hostkey: yes
+
+    - name: "Increase vm.max_map_count"
+      shell: "sysctl -w vm.max_map_count=262144"
+    - name: "Test if vm.max_map_count is set permanently"
+      shell: cat /etc/sysctl.conf | grep vm.max_map_count | wc -l
+      register: test_max_map_count
+    - name: "Increase vm.max_map_count permanently"
+      shell: echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+      when: test_max_map_count.stdout == "0"

@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook -i "localhost," -c local bwsdev.yml
+ansible-playbook -i "localhost," -c local setup-sandbox-server.yml
