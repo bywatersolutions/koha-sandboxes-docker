@@ -1,0 +1,33 @@
+[% INCLUDE wrapper_top.html.tt2 %]
+
+<h2>Sandboxes</h2>
+
+<h3>[% msg %]</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Notes</th>
+            <th>Creator</th>
+            <th>Staff</th>
+            <th>OPAC</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        [% FOREACH s IN sandboxes.to_array %]
+            <tr>
+                <td>[% s.name %]</td>
+                <td>[% s.description %]</td>
+                <td>[% s.notes %]</td>
+                <td>[% s.user %]</td>
+                <td><a target="_new" href="http://staff.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
+                <td><a target="_new" href="http://opac.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
+            </tr>
+        [% END %]
+    </tbody>
+</table>
+
+[% INCLUDE wrapper_bottom.html.tt2 %]
