@@ -67,5 +67,5 @@
     - name: "Install apache config for sandbox instance"
       template:
         src: templates/sandbox_instance.j2
-        dest: /etc/apache2/sites-enabled/{{ instance_name }}.conf
-      notify: "Install koha git config"
+        dest: /etc/apache2/sites-available/{{ instance_name }}.conf
+      notify: "Enable apache site"
