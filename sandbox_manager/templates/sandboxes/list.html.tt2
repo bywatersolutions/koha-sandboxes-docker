@@ -23,8 +23,8 @@
                 <td>[% s.description %]</td>
                 <td>[% s.notes %]</td>
                 <td>[% s.user %]</td>
-                <td><a target="_new" href="http://staff.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
-                <td><a target="_new" href="http://opac.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
+                <td><a target="_blank" href="http://staff.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
+                <td><a target="_blank" href="http://opac.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
             </tr>
         [% END %]
     </tbody>
