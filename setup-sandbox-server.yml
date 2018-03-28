@@ -66,3 +66,6 @@
         src: templates/webapp.conf.j2
         dest: /etc/apache2/sites-available/webapp.conf
       notify: "Enable apache webapp site"
+
+    - name: "Pull the latest docker images for koha-testing-docker"
+      shell: docker pull koha/koha-testing:master
