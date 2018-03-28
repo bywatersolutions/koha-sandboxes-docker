@@ -5,20 +5,37 @@
 <h3>[% msg %]</h3>
 
 <div class="container">
-    <form>
+    <form id="create-sandbox" method="post" action="[% c.url_for('/create') %]">
       <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <label for="name">Your name</label>
+        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" required>
+        <small id="descriptionHelp" class="form-text text-muted">Enter your name ( or alias, nick or whatever )</small>
       </div>
+
       <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <label for="name">Sandbox name</label>
+        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[_a-zA-Z0-9-]+" required>
+        <small id="nameHelp" class="form-text text-muted">Enter a simple name for your sandbox, lower case all letters and numbers, dashes and underscores.</small>
       </div>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+
+      <div class="form-group">
+        <label for="name">Description</label>
+        <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter description">
+        <small id="descriptionHelp" class="form-text text-muted">Enter a basic description, optional.</small>
       </div>
+
+      <div class="form-group">
+        <label for="name">Description</label>
+        <input type="text" class="form-control" name="name" id="name" aria-describedby="descriptionHelp" placeholder="Enter description">
+        <small id="descriptionHelp" class="form-text text-muted">Enter a basic description, optional.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Notes</label>
+        <input type="text" class="form-control" name="name" id="name" aria-describedby="notesHelp" placeholder="Enter notes">
+        <small id="notesHelp" class="form-text text-muted">Add notes, optional.</small>
+      </div>
+
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
