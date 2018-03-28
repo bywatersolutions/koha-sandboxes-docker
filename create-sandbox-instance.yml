@@ -66,6 +66,6 @@
 
     - name: "Install apache config for sandbox instance"
       template:
-        src: templates/sandbox_instance.j2
+        src: templates/sandbox_instance.conf.j2
         dest: /etc/apache2/sites-available/{{ instance_name }}.conf
       notify: "Enable apache site"

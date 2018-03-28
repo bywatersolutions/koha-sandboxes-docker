@@ -4,6 +4,11 @@
     - 
       name: "Restart apache"
       service: "name=apache2 state=restarted"
+    - 
+      name: "Enable apache webapp site"
+      shell: a2ensite webapp
+      notify:
+        - "Restart apache"
     -
       name: "Install koha git config"
       copy: 
@@ -55,3 +60,9 @@
     - name: "Increase vm.max_map_count permanently"
       shell: echo "vm.max_map_count=262144" >> /etc/sysctl.conf
       when: test_max_map_count.stdout == "0"
+
+    - name: "Install apache config for webapp"
+      template:
+        src: templates/webapp.conf.j2
+        dest: /etc/apache2/sites-available/webapp.conf
+      notify: "Enable apache webapp site"
