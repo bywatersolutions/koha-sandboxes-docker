@@ -25,8 +25,7 @@ sub startup {
   # Normal route to controller
   $r->get('/')->to('sandboxes#list');
   $r->get('/create')->to('sandboxes#create_form');
-  $r->post('/create')->to('sandboxes$create_submit');
-
+  $r->post('/create')->to('sandboxes#create_submit');
 }
 
 1;

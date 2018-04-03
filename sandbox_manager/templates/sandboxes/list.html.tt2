@@ -2,7 +2,11 @@
 
 <h2>Sandboxes</h2>
 
-<h3>[% msg %]</h3>
+[%- IF sandbox_created %]
+    <div class="alert alert-success" role="alert">
+        Sandbox created!
+    </div>
+[%- END %]
 
 <table class="table">
     <thead>

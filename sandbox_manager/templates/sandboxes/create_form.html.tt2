@@ -1,43 +1,64 @@
 [% INCLUDE wrapper_top.html.tt2 %]
 
-<h2>Create a sandbox</h2>
-
-<h3>[% msg %]</h3>
-
 <div class="container">
+    <h2>Create a sandbox</h2>
+
+    [% IF errors.keys %]
+    <div class="alert alert-danger" role="alert">
+        The following problems prevented the creation of your sandbox:
+        <ul>
+            [% IF errors.name_required %]
+                <li>Sandbox name is required.</li>
+            [% END %]
+
+            [% IF errors.user_required %]
+                <li>Your name is required.</li>
+            [% END %]
+
+            [% IF errors.name_taken %]
+                <li>Sandbox name is already in use.</li>
+            [% END %]
+        </ul>
+    </div>
+    [% END %]
+
     <form id="create-sandbox" method="post" action="[% c.url_for('/create') %]">
       <div class="form-group">
         <label for="name">Your name</label>
-        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" required>
+        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% params.user %]" required>
         <small id="descriptionHelp" class="form-text text-muted">Enter your name ( or alias, nick or whatever )</small>
       </div>
 
       <div class="form-group">
         <label for="name">Sandbox name</label>
-        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[_a-zA-Z0-9-]+" required>
+        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[_a-zA-Z0-9-]+" value="[% params.name %]" required>
         <small id="nameHelp" class="form-text text-muted">Enter a simple name for your sandbox, lower case all letters and numbers, dashes and underscores.</small>
       </div>
 
       <div class="form-group">
         <label for="name">Description</label>
-        <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter description">
+        <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter description" value="[% input.description %]">
         <small id="descriptionHelp" class="form-text text-muted">Enter a basic description, optional.</small>
       </div>
 
       <div class="form-group">
-        <label for="name">Description</label>
-        <input type="text" class="form-control" name="name" id="name" aria-describedby="descriptionHelp" placeholder="Enter description">
-        <small id="descriptionHelp" class="form-text text-muted">Enter a basic description, optional.</small>
-      </div>
-
-      <div class="form-group">
-        <label for="name">Notes</label>
-        <input type="text" class="form-control" name="name" id="name" aria-describedby="notesHelp" placeholder="Enter notes">
+        <label for="notes">Notes</label>
+        <input type="text" class="form-control" name="notes" id="notes" aria-describedby="notesHelp" placeholder="Enter notes" value="[% input.notes %]">
         <small id="notesHelp" class="form-text text-muted">Add notes, optional.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" placeholder="Enter password" value="[% input.password %]">
+        <small id="passwordHelp" class="form-text text-muted">Password protect from deletion, optional.</small>
       </div>
 
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
+<script>
+    document.getElementById("user").focus();
+</script>
 
 [% INCLUDE wrapper_bottom.html.tt2 %]
