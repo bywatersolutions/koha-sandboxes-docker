@@ -1,7 +1,11 @@
 package SandboxManager::Controller::Sandboxes;
 use Mojo::Base 'Mojolicious::Controller';
 
+use Mojo::Transaction::WebSocket;
+
 use DateTime;
+use File::Slurp qw( read_file );
+use Try::Tiny;
 
 sub list {
     my $self = shift;
@@ -10,9 +14,9 @@ sub list {
     my $sandboxes = $results->hashes;
 
     $self->render(
-        title     => "Koha Sandbox Manager",
+        title           => "Koha Sandbox Manager",
         sandbox_created => $self->param('scs'),
-        sandboxes => $sandboxes,
+        sandboxes       => $sandboxes,
     );
 }
 
@@ -46,29 +50,72 @@ sub create_submit {
         user        => $user,
         password    => $password,
         created_on  => DateTime->now()->datetime(q{ }),
+        status      => 'pending',
     };
 
     if ( keys %$errors ) {
         $self->render(
-            errors => $errors,
-            params => $params,
-
-            title => "Koha Sandbox Manager",
-
+            errors   => $errors,
+            params   => $params,
+            title    => "Koha Sandbox Manager",
             template => 'sandboxes/create_form',
         );
 
     }
     else {
-        if ( my $id = $self->sqlite->db->insert( 'sandboxes', $params )->last_insert_id ) {
-            warn "PWD: " . qx( pwd );
-            my $output = qx( ansible-playbook -i 'localhost,' -c local --extra-vars 'instance_name=$name' /home/kyle/bws-development-ansible/create-sandbox-instance.yml );
-            warn "OUTPUT: $output";
-        }
-
-        $self->stash( { sandbox_created => 'success' } );
-        $self->redirect_to('/?scs=1');
+        $self->sqlite->db->insert( 'sandboxes', $params );
+        $self->stash( { sandbox => $params } );
+        $self->render( title => "Koha Sandbox Manager - Provision Sandbox" );
     }
 }
 
+sub provision {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    #FIXME: Where should this live?
+    $self->minion->add_task(
+        "provision" => sub {
+            my ( $job, $name ) = @_;
+
+            $job->on(
+                finished => sub {
+                    my ( $job, $result ) = @_;
+
+                    $self->sqlite->db->update(
+                        'sandboxes',
+                        { status => 'provisioned' },
+                        { name   => $name }
+                    );
+
+                }
+            );
+
+            warn "EXECING";
+        qx( ansible-playbook -i 'localhost,' -c local --extra-vars 'instance_name=$name' /home/kyle/bws-development-ansible/create-sandbox-instance.yml >>/tmp/$name.log 2>&1 );
+            warn "DONE EXECING";
+
+        }
+    );
+
+    $self->minion->enqueue( provision => $name );
+#    $self->minion->perform_jobs;
+
+    $self->render( json => { provisioning => 1 } );
+}
+
+sub provision_log {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    my $text;
+    try {
+        $text = read_file("/tmp/$name.log");
+    }
+    catch {
+        $text = $_;
+    };
+
+    $self->render( json => { text => $text } );
+}
 1;
