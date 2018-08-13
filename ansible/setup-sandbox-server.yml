@@ -120,3 +120,15 @@
             memlock:-1:-1
         networks:
           - name: kohanet
+
+    - name: Ensure Memcache Docker container is running
+      docker_container:
+        name: memcached
+        state: present
+        image: memcached
+        pull: yes
+        restart: yes
+        restart_policy: always
+        state: started
+        networks:
+          - name: kohanet
