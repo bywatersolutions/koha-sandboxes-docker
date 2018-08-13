@@ -27,6 +27,7 @@
   become: true
 
   roles:
+    - geerlingguy.pip
     - geerlingguy.docker
 
   tasks:
@@ -74,3 +75,48 @@
 
     - name: "Pull the latest docker images for koha-testing-docker"
       shell: docker pull koha/koha-testing:master
+
+    # Install (Bottle) docker package.
+    - pip:
+        name: docker
+        state: present
+
+    - name: Create docker network kohanet
+      docker_network:
+          name: kohanet
+
+    - name: Ensure MySQL database Docker container is running
+      docker_container:
+        name: db
+        state: present
+        image: mysql:5.5
+        pull: yes
+        restart: yes
+        restart_policy: always
+        state: started
+        env:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: koha_kohadev
+            MYSQL_USER: koha
+            MYSQL_PASSWORD: password
+        networks:
+          - name: kohanet
+
+    - name: Ensure Elastic Docker container is running
+      docker_container:
+        name: es
+        state: present
+        image: koha/elasticsearch-icu
+        pull: yes
+        restart: yes
+        restart_policy: always
+        state: started
+        env:
+            cluster.name: "docker-cluster"
+            bootstrap.memory_lock: "true"
+            xpack.security.enabled: "false"
+            ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        ulimits:
+            memlock:-1:-1
+        networks:
+          - name: kohanet
