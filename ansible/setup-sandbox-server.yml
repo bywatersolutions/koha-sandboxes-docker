@@ -1,17 +1,17 @@
---- 
-- 
-  handlers: 
-    - 
+---
+-
+  handlers:
+    -
       name: "Restart apache"
       service: "name=apache2 state=restarted"
-    - 
+    -
       name: "Enable apache webapp site"
       shell: a2ensite webapp
       notify:
         - "Restart apache"
     -
       name: "Install koha git config"
-      copy: 
+      copy:
         dest: /usr/local/src/koha/.git/config
         mode: 365
         owner: root
@@ -22,9 +22,14 @@
     -
       name: "Update koha git repo"
       command: cd /usr/local/src/koha && yes | git fetch --all
+
   hosts: all
   become: true
-  tasks: 
+
+  roles:
+    - geerlingguy.docker
+
+  tasks:
     - name: Install "git" package
       apt:
         name: git
