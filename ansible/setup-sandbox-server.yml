@@ -96,9 +96,9 @@
         state: started
         env:
             MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: koha_kohadev
             MYSQL_USER: koha
             MYSQL_PASSWORD: password
+        published_ports: 3306:3306
         networks:
           - name: kohanet
 

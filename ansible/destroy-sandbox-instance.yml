@@ -18,6 +18,24 @@
         state: absent
         force_kill: yes
 
+    - name: Delete database for Koha instance
+      mysql_db:
+        name: "koha_{{ instance_name }}"
+        state: absent
+        login_host: 127.0.0.1
+        login_port: 3306
+        login_user: root
+        login_password: password
+
+    - name: Delete database use for Koha instnace
+      mysql_user:
+        name: "koha_{{ instance_name }}"
+        state: absent
+        login_host: 127.0.0.1
+        login_port: 3306
+        login_user: root
+        login_password: password
+
     - name: "Delete sandbox instance koha git clone"
       file:
         path: /usr/local/src/koha-sandboxes/{{ instance_name }}
