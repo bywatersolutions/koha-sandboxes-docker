@@ -57,7 +57,7 @@
     - mysql_user:
         name: "koha_{{ instance_name }}"
         password: password
-        priv: '*.*:ALL'
+        priv: 'koha_{{ instance_name }}.*:ALL'
         host: '%'
         state: present
         login_host: 127.0.0.1
