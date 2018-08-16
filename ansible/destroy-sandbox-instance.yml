@@ -1,19 +1,22 @@
---- 
-- 
+---
+-
   hosts: all
   become: true
 
-  handlers: 
-    - 
+  handlers:
+    -
       name: "Restart apache"
       service: "name=apache2 state=restarted"
 
-  tasks: 
+  tasks:
     - debug:
         msg: "Using '{{ instance_name }}' as instance name"
 
-    - name: "Stop sandbox instance via docker-compose"
-      shell: docker-compose -f /usr/local/src/koha-testing-docker/docker-compose.yml -p sandbox{{ instance_name }} down
+    - name: Remove koha-testing-docker container
+      docker_container:
+        name: "koha-{{ instance_name }}"
+        state: absent
+        force_kill: yes
 
     - name: "Delete sandbox instance koha git clone"
       file:

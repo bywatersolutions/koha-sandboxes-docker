@@ -1,17 +1,17 @@
---- 
-- 
-  handlers: 
-    - 
+---
+-
+  handlers:
+    -
       name: "Restart apache"
       service: "name=apache2 state=restarted"
-    - 
+    -
       name: "Enable apache site"
       shell: a2ensite {{ instance_name }}
       notify:
         - "Restart apache"
     -
       name: "Install koha git config"
-      copy: 
+      copy:
         dest: /usr/local/src/koha/.git/config
         mode: 365
         owner: root
@@ -24,9 +24,11 @@
     -
       name: "Update koha git repo for sandbox"
       shell: "cd /usr/local/src/koha-sandboxes/{{ instance_name }} && yes | git fetch --all"
+
   hosts: all
   become: true
-  tasks: 
+
+  tasks:
     - debug:
         msg: "Using '{{ instance_name }}' as instance name"
 
@@ -36,13 +38,15 @@
         dest: /usr/local/src/koha
         accept_hostkey: yes
         update: yes
-      notify: 
+      notify:
         - "Install koha git config"
+
     - name: "Copy source koha clone for sandbox"
       shell: "[ -d /usr/local/src/koha-sandboxes/{{ instance_name }} ] || git clone -l -s --progress /usr/local/src/koha /usr/local/src/koha-sandboxes/{{ instance_name }}"
       ignore_errors: yes
+
     - name: "Install koha git config for sandbox"
-      copy: 
+      copy:
         dest: /usr/local/src/koha-sandboxes/{{ instance_name }}/.git/config
         mode: 365
         owner: root
@@ -50,8 +54,46 @@
       notify:
         - "Update koha git repo for sandbox"
 
-    - name: "Launch sandbox instance via docker-compose"
-      shell: SYNC_REPO=/usr/local/src/koha-sandboxes/{{ instance_name }}/ docker-compose -f /usr/local/src/koha-testing-docker/docker-compose.yml -p sandbox{{ instance_name }} up -d
+    - name: Start new koha-testing-docker container
+      docker_container:
+        name: "koha-{{ instance_name }}"
+        state: present
+        image: koha/koha-testing:master
+        pull: yes
+        restart: yes
+        restart_policy: always
+        state: started
+        networks:
+          - name: kohanet
+        env:
+            DB_HOSTNAME: db
+            EDITOR: vim
+            GIT_BZ_PASSWORD: nothing
+            GIT_BZ_USER: me@example.com
+            GIT_USER_EMAIL: me@example.com
+            GIT_USER_NAME: John Doe
+            KOHA_CONF: /etc/koha/sites/kohadev/koha-conf.xml
+            KOHA_DB_PASSWORD: password
+            KOHA_DOMAIN: .myDNSname.org
+            KOHA_INSTANCE: "{{ instance_name }}"
+            KOHA_INTRANET_PORT: 8081
+            KOHA_INTRANET_PREFIX:
+            KOHA_INTRANET_SUFFIX: -intra
+            KOHA_MARC_FLAVOUR: marc21
+            KOHA_OPAC_PORT: 8080
+            KOHA_OPAC_PREFIX:
+            KOHA_OPAC_SUFFIX:
+            KOHA_PASS: koha
+            KOHA_PROVE_CPUS:
+            KOHA_USER: koha
+            PERL5LIB: /kohadevbox/koha:/kohadevbox/qa-test-tools
+            REMOTE_DEBUGGER_DIR:
+            REMOTE_DEBUGGER_KEY:
+            REMOTE_DEBUGGER_LOCATION:
+            REMOTE_DEBUGGER_PACKAGE:
+            RUN_TESTS_AND_EXIT: no
+        volumes:
+          - /usr/local/src/koha-sandboxes/{{ instance_name }}:/kohadevbox/koha
 
     - name: "Get host port for sandbox staff port"
       shell: docker port sandbox{{ instance_name }}_koha_1 | grep 8081 | rev | cut -d":" -f1 | rev

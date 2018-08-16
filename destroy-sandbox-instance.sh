@@ -33,9 +33,9 @@ if [ "$INSTANCE_NAME" = "" ]; then
     exit 1
 fi
 
-COMMAND="ansible-playbook -i 'localhost,' -c local --extra-vars 'instance_name=$INSTANCE_NAME' destroy-sandbox-instance.yml" 
+COMMAND="ansible-playbook -i 'localhost,' -c local --extra-vars 'instance_name=$INSTANCE_NAME' ansible/destroy-sandbox-instance.yml" 
 if [ "$VERBOSE" = "1" ]; then
     echo $COMMAND
 fi
 #$COMMAND # This doesn't work for some reason
-ansible-playbook -i 'localhost,' -c local --extra-vars "instance_name=$INSTANCE_NAME" destroy-sandbox-instance.yml
+ansible-playbook -i 'localhost,' -c local --extra-vars "instance_name=$INSTANCE_NAME" ansible/destroy-sandbox-instance.yml
