@@ -27,10 +27,11 @@
         login_user: root
         login_password: password
 
-    - name: Delete database use for Koha instnace
+    - name: Delete database user for Koha instnace
       mysql_user:
         name: "koha_{{ instance_name }}"
         state: absent
+        host: '%'
         login_host: 127.0.0.1
         login_port: 3306
         login_user: root

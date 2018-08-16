@@ -45,19 +45,20 @@
       shell: "[ -d /usr/local/src/koha-sandboxes/{{ instance_name }} ] || git clone -l -s --progress /usr/local/src/koha /usr/local/src/koha-sandboxes/{{ instance_name }}"
       ignore_errors: yes
 
-    - mysql_user:
+    - name: Create a new database for Koha instance
+      mysql_db:
         name: "koha_{{ instance_name }}"
-        password: password
-        priv: 'koha_{{ instance_name }}.*:ALL'
         state: present
         login_host: 127.0.0.1
         login_port: 3306
         login_user: root
         login_password: password
 
-    - name: Create a new database for Koha instance
-      mysql_db:
+    - mysql_user:
         name: "koha_{{ instance_name }}"
+        password: password
+        priv: '*.*:ALL'
+        host: '%'
         state: present
         login_host: 127.0.0.1
         login_port: 3306
