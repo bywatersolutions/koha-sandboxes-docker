@@ -85,6 +85,9 @@
         state: started
         networks:
           - name: kohanet
+        published_ports:
+          - 8080
+          - 8081
         env:
             DB_HOSTNAME: db
             EDITOR: vim
@@ -116,12 +119,12 @@
           - /usr/local/src/koha-sandboxes/{{ instance_name }}:/kohadevbox/koha
 
     - name: "Get host port for sandbox staff port"
-      shell: docker port sandbox{{ instance_name }}_koha_1 | grep 8081 | rev | cut -d":" -f1 | rev
+      shell: docker port koha-{{ instance_name }} | grep 8081 | rev | cut -d":" -f1 | rev
       register: docker_port_intranet
     - debug:
         msg: "Using '{{ docker_port_intranet.stdout }}' as staff port"
     - name: "Get host port for sandbox opac port"
-      shell: docker port sandbox{{ instance_name }}_koha_1 | grep 8080 | rev | cut -d":" -f1 | rev
+      shell: docker port koha-{{ instance_name }} | grep 8080 | rev | cut -d":" -f1 | rev
       register: docker_port_opac
     - debug:
         msg: "Using '{{ docker_port_opac.stdout }}' as opac port"
