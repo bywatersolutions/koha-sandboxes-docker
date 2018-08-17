@@ -28,6 +28,10 @@
   hosts: all
   become: true
 
+  vars_files:
+      - vars/defaults.yml
+      - vars/user.yml
+
   tasks:
     - debug:
         msg: "Using '{{ instance_name }}' as instance name"
@@ -83,6 +87,7 @@
         restart: yes
         restart_policy: always
         state: started
+        privileged: yes
         networks:
           - name: kohanet
         published_ports:
@@ -117,6 +122,7 @@
             RUN_TESTS_AND_EXIT: no
         volumes:
           - /usr/local/src/koha-sandboxes/{{ instance_name }}:/kohadevbox/koha
+          - /usr/local/src/koha:/usr/local/src/koha
 
     - name: "Get host port for sandbox staff port"
       shell: docker port koha-{{ instance_name }} | grep 8081 | rev | cut -d":" -f1 | rev
