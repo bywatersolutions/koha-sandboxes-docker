@@ -78,8 +78,8 @@
       docker_container:
         name: "koha-{{ instance_name }}"
         state: present
-        image: koha-testing-kyle:latest
-        #pull: yes
+        image: koha/koha-testing:master
+        pull: yes
         restart: yes
         restart_policy: always
         state: started
@@ -97,8 +97,6 @@
             GIT_USER_NAME: John Doe
             KOHA_CONF: /etc/koha/sites/kohadev/koha-conf.xml
             KOHA_DB_PASSWORD: password
-            KOHA_DB_NAME: "koha_{{ instance_name }}"
-            KOHA_DB_USER: "koha_{{ instance_name }}"
             KOHA_DOMAIN: .myDNSname.org
             KOHA_INSTANCE: "{{ instance_name }}"
             KOHA_INTRANET_PORT: 8081
