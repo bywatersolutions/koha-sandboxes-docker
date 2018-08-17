@@ -40,6 +40,10 @@
       apt:
         name: default-libmysqlclient-dev
 
+    - name: Install "mariadb-client" package to allow cli access to db container
+      apt:
+        name: mariadb-client
+
     - name: Install "apache2" package
       apt:
         name: apache2
