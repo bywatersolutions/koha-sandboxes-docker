@@ -36,6 +36,10 @@
         name: git
 #        update_cache: yes
 
+    - name: Install "default-libmysqlclient-dev" package, needed for pip package "MySQL-python"
+      apt:
+        name: default-libmysqlclient-dev
+
     - name: Install "apache2" package
       apt:
         name: apache2
@@ -76,9 +80,12 @@
     - name: "Pull the latest docker images for koha-testing-docker"
       shell: docker pull koha/koha-testing:master
 
-    # Install (Bottle) docker package.
     - pip:
         name: docker
+        state: present
+
+    - pip:
+        name: MySQL-python
         state: present
 
     - name: Create docker network kohanet
