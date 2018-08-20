@@ -51,6 +51,26 @@
       apache2_module:
         state: present
         name: proxy
+      notify:
+        - "Restart apache"
+    - name: Enable mod ssl for apache2
+      apache2_module:
+        state: present
+        name: ssl
+      notify:
+        - "Restart apache"
+    - name: Enable mod proxy_balancer for apache2
+      apache2_module:
+        state: present
+        name: proxy_balancer
+      notify:
+        - "Restart apache"
+    - name: Enable mod proxy_http for apache2
+      apache2_module:
+        state: present
+        name: proxy_http
+      notify:
+        - "Restart apache"
 
     - name: "Clone koha source to /usr/local/src/koha"
       git:
