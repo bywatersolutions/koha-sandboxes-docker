@@ -3,4 +3,4 @@
 KOHA_INSTANCE: kohadev 
 GIT_USER_EMAIL: me@example.com
 GIT_USER_NAME: John Doe
-KOHA_CONF: /etc/koha/sites/kohdev/koha-conf.xml
+KOHA_CONF: /etc/koha/sites/kohadev/koha-conf.xml
