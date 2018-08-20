@@ -1,0 +1,5 @@
+# Default configuration values
+---
+sandbox_host_domain: sandboxes.example.com
+GIT_BZ_USER: "me@example.com"
+GIT_BZ_PASSWORD: "let me in plz, ty"

@@ -1,12 +1,15 @@
 ---
 -
+  hosts: all
+  become: true
+
   handlers:
     -
       name: "Restart apache"
       service: "name=apache2 state=restarted"
     -
       name: "Enable apache site"
-      shell: a2ensite {{ instance_name }}
+      shell: a2ensite {{ KOHA_INSTANCE }}
       notify:
         - "Restart apache"
     -
@@ -23,18 +26,16 @@
       shell: "cd /usr/local/src/koha && yes | git fetch --all"
     -
       name: "Update koha git repo for sandbox"
-      shell: "cd /usr/local/src/koha-sandboxes/{{ instance_name }} && yes | git fetch --all"
-
-  hosts: all
-  become: true
+      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all"
 
   vars_files:
       - vars/defaults.yml
       - vars/user.yml
+      - "{{ env_file }}"
 
   tasks:
     - debug:
-        msg: "Using '{{ instance_name }}' as instance name"
+        msg: "Using '{{ KOHA_INSTANCE }}' as instance name"
 
     - name: "Clone koha source to /usr/local/src/koha"
       git:
@@ -46,12 +47,12 @@
         - "Install koha git config"
 
     - name: "Copy source koha clone for sandbox"
-      shell: "[ -d /usr/local/src/koha-sandboxes/{{ instance_name }} ] || git clone -l -s --progress /usr/local/src/koha /usr/local/src/koha-sandboxes/{{ instance_name }}"
+      shell: "[ -d /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} ] || git clone -l -s --progress /usr/local/src/koha /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}"
       ignore_errors: yes
 
     - name: Create a new database for Koha instance
       mysql_db:
-        name: "koha_{{ instance_name }}"
+        name: "koha_{{ KOHA_INSTANCE }}"
         state: present
         login_host: 127.0.0.1
         login_port: 3306
@@ -59,9 +60,9 @@
         login_password: password
 
     - mysql_user:
-        name: "koha_{{ instance_name }}"
+        name: "koha_{{ KOHA_INSTANCE }}"
         password: password
-        priv: 'koha_{{ instance_name }}.*:ALL'
+        priv: 'koha_{{ KOHA_INSTANCE }}.*:ALL'
         host: '%'
         state: present
         login_host: 127.0.0.1
@@ -71,7 +72,7 @@
 
     - name: "Install koha git config for sandbox"
       copy:
-        dest: /usr/local/src/koha-sandboxes/{{ instance_name }}/.git/config
+        dest: /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}/.git/config
         mode: 365
         owner: root
         src: files/git/config
@@ -80,7 +81,7 @@
 
     - name: Start new koha-testing-docker container
       docker_container:
-        name: "koha-{{ instance_name }}"
+        name: "koha-{{ KOHA_INSTANCE }}"
         state: present
         image: koha/koha-testing:master
         pull: yes
@@ -94,43 +95,43 @@
           - 8080
           - 8081
         env:
-            DB_HOSTNAME: db
-            EDITOR: vim
-            GIT_BZ_PASSWORD: nothing
-            GIT_BZ_USER: me@example.com
-            GIT_USER_EMAIL: me@example.com
-            GIT_USER_NAME: John Doe
-            KOHA_CONF: /etc/koha/sites/kohadev/koha-conf.xml
-            KOHA_DB_PASSWORD: password
-            KOHA_DOMAIN: .myDNSname.org
-            KOHA_INSTANCE: "{{ instance_name }}"
-            KOHA_INTRANET_PORT: 8081
-            KOHA_INTRANET_PREFIX:
-            KOHA_INTRANET_SUFFIX: -intra
-            KOHA_MARC_FLAVOUR: marc21
-            KOHA_OPAC_PORT: 8080
-            KOHA_OPAC_PREFIX:
-            KOHA_OPAC_SUFFIX:
-            KOHA_PASS: koha
-            KOHA_PROVE_CPUS:
-            KOHA_USER: koha
-            PERL5LIB: /kohadevbox/koha:/kohadevbox/qa-test-tools
-            REMOTE_DEBUGGER_DIR:
-            REMOTE_DEBUGGER_KEY:
-            REMOTE_DEBUGGER_LOCATION:
-            REMOTE_DEBUGGER_PACKAGE:
-            RUN_TESTS_AND_EXIT: no
+            DB_HOSTNAME: "{{ DB_HOSTNAME }}"
+            EDITOR: "{{ EDITOR }}"
+            GIT_BZ_PASSWORD: "{{ GIT_BZ_PASSWORD }}"
+            GIT_BZ_USER: "{{ GIT_BZ_USER }}"
+            GIT_USER_EMAIL: "{{ GIT_USER_EMAIL }}"
+            GIT_USER_NAME: "{{ GIT_USER_NAME }}"
+            KOHA_CONF: "{{ KOHA_CONF }}"
+            KOHA_DB_PASSWORD: "{{ KOHA_DB_PASSWORD }}"
+            KOHA_DOMAIN: "{{ KOHA_DOMAIN }}"
+            KOHA_INSTANCE: "{{ KOHA_INSTANCE }}"
+            KOHA_INTRANET_PORT: "{{ KOHA_INTRANET_PORT }}"
+            KOHA_INTRANET_PREFIX: "{{ KOHA_INTRANET_PREFIX }}"
+            KOHA_INTRANET_SUFFIX: "{{ KOHA_INTRANET_SUFFIX }}"
+            KOHA_MARC_FLAVOUR: "{{ KOHA_MARC_FLAVOUR }}"
+            KOHA_OPAC_PORT: "{{ KOHA_OPAC_PORT }}"
+            KOHA_OPAC_PREFIX: "{{ KOHA_OPAC_PREFIX }}"
+            KOHA_OPAC_SUFFIX: "{{ KOHA_OPAC_SUFFIX }}"
+            KOHA_PASS: "{{ KOHA_PASS }}"
+            KOHA_PROVE_CPUS: "{{ KOHA_PROVE_CPUS }}"
+            KOHA_USER: "{{ KOHA_USER }}"
+            PERL5LIB: "{{ PERL5LIB }}"
+            REMOTE_DEBUGGER_DIR: "{{ REMOTE_DEBUGGER_DIR }}"
+            REMOTE_DEBUGGER_KEY: "{{ REMOTE_DEBUGGER_KEY }}"
+            REMOTE_DEBUGGER_LOCATION: "{{ REMOTE_DEBUGGER_LOCATION }}"
+            REMOTE_DEBUGGER_PACKAGE: "{{ REMOTE_DEBUGGER_PACKAGE }}"
+            RUN_TESTS_AND_EXIT: "{{ RUN_TESTS_AND_EXIT }}"
         volumes:
-          - /usr/local/src/koha-sandboxes/{{ instance_name }}:/kohadevbox/koha
+          - /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}:/kohadevbox/koha
           - /usr/local/src/koha:/usr/local/src/koha
 
     - name: "Get host port for sandbox staff port"
-      shell: docker port koha-{{ instance_name }} | grep 8081 | rev | cut -d":" -f1 | rev
+      shell: docker port koha-{{ KOHA_INSTANCE }} | grep 8081 | rev | cut -d":" -f1 | rev
       register: docker_port_intranet
     - debug:
         msg: "Using '{{ docker_port_intranet.stdout }}' as staff port"
     - name: "Get host port for sandbox opac port"
-      shell: docker port koha-{{ instance_name }} | grep 8080 | rev | cut -d":" -f1 | rev
+      shell: docker port koha-{{ KOHA_INSTANCE }} | grep 8080 | rev | cut -d":" -f1 | rev
       register: docker_port_opac
     - debug:
         msg: "Using '{{ docker_port_opac.stdout }}' as opac port"
@@ -138,5 +139,5 @@
     - name: "Install apache config for sandbox instance"
       template:
         src: templates/sandbox_instance.conf.j2
-        dest: /etc/apache2/sites-available/{{ instance_name }}.conf
+        dest: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
       notify: "Enable apache site"

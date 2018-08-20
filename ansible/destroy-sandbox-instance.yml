@@ -8,19 +8,24 @@
       name: "Restart apache"
       service: "name=apache2 state=restarted"
 
+  vars_files:
+      - vars/defaults.yml
+      - vars/user.yml
+      - "{{ env_file }}"
+
   tasks:
     - debug:
-        msg: "Using '{{ instance_name }}' as instance name"
+        msg: "Using '{{ KOHA_INSTANCE }}' as instance name"
 
     - name: Remove koha-testing-docker container
       docker_container:
-        name: "koha-{{ instance_name }}"
+        name: "koha-{{ KOHA_INSTANCE }}"
         state: absent
         force_kill: yes
 
     - name: Delete database for Koha instance
       mysql_db:
-        name: "koha_{{ instance_name }}"
+        name: "koha_{{ KOHA_INSTANCE }}"
         state: absent
         login_host: 127.0.0.1
         login_port: 3306
@@ -29,7 +34,7 @@
 
     - name: Delete database user for Koha instnace
       mysql_user:
-        name: "koha_{{ instance_name }}"
+        name: "koha_{{ KOHA_INSTANCE }}"
         state: absent
         host: '%'
         login_host: 127.0.0.1
@@ -39,11 +44,11 @@
 
     - name: "Delete sandbox instance koha git clone"
       file:
-        path: /usr/local/src/koha-sandboxes/{{ instance_name }}
+        path: /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}
         state: absent
 
     - name: "Remove apache config for sandbox instance"
       file:
-        path: /etc/apache2/sites-enabled/{{ instance_name }}.conf
+        path: /etc/apache2/sites-enabled/{{ KOHA_INSTANCE }}.conf
         state: absent
       notify: "Restart apache"

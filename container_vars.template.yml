@@ -1,0 +1,5 @@
+# Instance vars for sandbox 'kohadev'
+---
+KOHA_INSTANCE: kohadev 
+GIT_USER_EMAIL: me@example.com
+GIT_USER_NAME: John Doe
