@@ -2,4 +2,4 @@
 ---
 sandbox_host_domain: sandboxes.example.com
 GIT_BZ_USER: "me@example.com"
-GIT_BZ_PASSWORD: "let me in plz, ty"
+GIT_BZ_PASSWORD: "letmeinplz,ty" # Spaces in password break everything, fyi
