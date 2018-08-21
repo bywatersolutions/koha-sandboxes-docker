@@ -141,3 +141,33 @@
         src: templates/sandbox_instance.conf.j2
         dest: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
       notify: "Enable apache site"
+
+    - debug:
+        msg: "Will apply bug number {{ BUG_NUMBER }} in 1 minute"
+      when: BUG_NUMBER is defined and BUG_NUMBER != ""
+    - name: "Pause for koha container to set itself up"
+      pause:
+        minutes: 1
+      when: BUG_NUMBER is defined and BUG_NUMBER != ""
+    - name: "Add this docker container to ansible hosts"
+      add_host:
+        name: "koha-{{ KOHA_INSTANCE }}"
+        groups: koha
+        ansible_connection: docker
+      changed_when: false
+    - debug:
+        msg: "Applying bug number {{ BUG_NUMBER }}"
+      when: BUG_NUMBER is defined and BUG_NUMBER != ""
+    - name: "Apply bug via git-bz in docker container"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "cd /kohadevbox/koha && yes | git bz apply {{ BUG_NUMBER }}"
+      when: BUG_NUMBER is defined and BUG_NUMBER != ""
+    - name: "Run updatedatabase.pl in docker container"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-shell -c '/kohadevbox/koha/installer/data/mysql/updatedatabase.pl' kohadev"
+      when: BUG_NUMBER is defined and BUG_NUMBER != ""
+    - name: "Restart plack in docker container"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
+      when: BUG_NUMBER is defined and BUG_NUMBER != ""
+
