@@ -36,6 +36,11 @@
         name: git
 #        update_cache: yes
 
+  tasks:
+    - name: Install "cpanminus" package
+      apt:
+        name: cpanminus
+
     - name: Install "default-libmysqlclient-dev" package, needed for pip package "MySQL-python"
       apt:
         name: default-libmysqlclient-dev
@@ -43,6 +48,9 @@
     - name: Install "mariadb-client" package to allow cli access to db container
       apt:
         name: mariadb-client
+
+    - cpanm:
+        name: Mojolicious::Commands
 
     - name: Install "apache2" package
       apt:
