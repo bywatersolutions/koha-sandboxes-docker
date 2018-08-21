@@ -21,14 +21,14 @@
     </thead>
 
     <tbody>
-        [% FOREACH s IN sandboxes.to_array %]
+        [% FOREACH s IN sandboxes %]
             <tr>
-                <td>[% s.name %]</td>
-                <td>[% s.description %]</td>
-                <td>[% s.notes %]</td>
-                <td>[% s.user %]</td>
-                <td><a target="_blank" href="http://staff.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
-                <td><a target="_blank" href="http://opac.[% s.name %].bwsdev2.bywatersolutions.com">Staff</a></td>
+                <td>[% s.KOHA_INSTANCE %]</td>
+                <td>[% s.DESCRIPTION %]</td>
+                <td>[% s.NOTES %]</td>
+                <td>[% s.GIT_USER_NAME %]</td>
+                <td><a target="_blank" href="http://staff.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]">Staff</a></td>
+                <td><a target="_blank" href="http://opac.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]">OPAC</a></td>
             </tr>
         [% END %]
     </tbody>

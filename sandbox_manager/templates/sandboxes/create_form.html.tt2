@@ -26,13 +26,25 @@
       <div class="form-group">
         <label for="name">Your name</label>
         <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% params.user %]" required>
-        <small id="descriptionHelp" class="form-text text-muted">Enter your name ( or alias, nick or whatever )</small>
+        <small id="nameHelp" class="form-text text-muted">Enter your name ( or alias, nick or whatever ). This will be used for signing off on patches.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Your email</label>
+        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter your email address" value="[% params.email %]" required>
+        <small id="emailHelp" class="form-text text-muted">Enter your email address. This will be used for signing off on patches.</small>
       </div>
 
       <div class="form-group">
         <label for="name">Sandbox name</label>
         <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[_a-zA-Z0-9-]+" value="[% params.name %]" required>
         <small id="nameHelp" class="form-text text-muted">Enter a simple name for your sandbox, lower case all letters and numbers, dashes and underscores.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="bug">Bug number</label>
+        <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="[% params.bug %]">
+        <small id="bugHelp" class="form-text text-muted">Enter a bug number here and it will be applied to your sandbox.</small>
       </div>
 
       <div class="form-group">
@@ -49,7 +61,7 @@
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" placeholder="Enter password" value="[% input.password %]">
+        <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" placeholder="Enter password" value="">
         <small id="passwordHelp" class="form-text text-muted">Password protect from deletion, optional.</small>
       </div>
 

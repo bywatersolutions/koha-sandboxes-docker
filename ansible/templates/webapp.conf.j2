@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-    ServerName app.bwsdev2.bywatersolutions.com
+    ServerName {{ sandbox_host_domain }}
 
     ProxyPass        / http://localhost:3000/ retry=0
     ProxyPassReverse / http://localhost:3000/ retry=0

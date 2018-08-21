@@ -1,5 +1,8 @@
 ---
 -
+  hosts: all
+  become: true
+
   handlers:
     -
       name: "Restart apache"
@@ -23,8 +26,9 @@
       name: "Update koha git repo"
       command: cd /usr/local/src/koha && yes | git fetch --all
 
-  hosts: all
-  become: true
+  vars_files:
+      - vars/defaults.yml
+      - vars/user.yml
 
   roles:
     - geerlingguy.pip
@@ -50,7 +54,15 @@
         name: mariadb-client
 
     - cpanm:
+        name: Module::Install
+    - cpanm:
         name: Mojolicious::Commands
+    - cpanm:
+        name: Mojolicious::Plugin::TemplateToolkit
+    - cpanm:
+        name: DateTime
+    - cpanm:
+        name: YAML
 
     - name: Install "apache2" package
       apt:
@@ -79,6 +91,23 @@
         name: proxy_http
       notify:
         - "Restart apache"
+    - name: Remove default apache file
+      file:
+        path: /etc/apache2/sites-enabled/000-default.conf
+        state: absent
+      notify:
+        - "Restart apache"
+
+    - name: Create directories to store sandbox files in
+      file:
+        path: /sandboxes/configs
+        state: directory
+        mode: 01777
+    - name: Create directories to store sandbox files in
+      file:
+        path: /sandboxes/logs
+        state: directory
+        mode: 01777
 
     - name: "Clone koha source to /usr/local/src/koha"
       git:

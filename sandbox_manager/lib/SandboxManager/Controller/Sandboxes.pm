@@ -1,22 +1,34 @@
 package SandboxManager::Controller::Sandboxes;
+
 use Mojo::Base 'Mojolicious::Controller';
 
-use Mojo::Transaction::WebSocket;
-
 use DateTime;
-use File::Slurp qw( read_file );
-use Try::Tiny;
+use File::Slurp;
+use YAML qw{ LoadFile DumpFile };
 
 sub list {
     my $self = shift;
 
-    my $results   = $self->sqlite->db->query("SELECT * FROM sandboxes");
-    my $sandboxes = $results->hashes;
+    my @sandboxes;
+
+    my $dir = q{/sandboxes/configs/};
+    opendir(DIR, $dir);
+    while (my $file = readdir(DIR)) {
+        next unless (-f "$dir/$file");
+        next unless ($file =~ m/\.yml$/);
+
+        my $yaml = LoadFile( $dir . $file );
+
+        push( @sandboxes, $yaml );
+    }
+
+    my $user_vars = LoadFile('../ansible/vars/user.yml');
+warn Data::Dumper::Dumper( $user_vars );
 
     $self->render(
         title           => "Koha Sandbox Manager",
-        sandbox_created => $self->param('scs'),
-        sandboxes       => $sandboxes,
+        sandboxes       => \@sandboxes,
+        user_vars       => $user_vars,
     );
 }
 
@@ -33,15 +45,15 @@ sub create_submit {
     my $description = $self->param('description');
     my $notes       = $self->param('notes');
     my $user        = $self->param('user');
+    my $email       = $self->param('email');
     my $password    = $self->param('password');
+    my $bug         = $self->param('bug');
 
     my $errors = {};
-    $errors->{name_required} = 1 unless $name;
-    $errors->{user_required} = 1 unless $user;
-    $errors->{name_taken}    = 1
-      if $self->sqlite->db->query(
-        'SELECT COUNT(*) AS count FROM sandboxes WHERE name = ?', $name )
-      ->hash->{count} > 0;
+    $errors->{name_required}  = 1 unless $name;
+    $errors->{user_required}  = 1 unless $user;
+    $errors->{email_required} = 1 unless $email;
+    $errors->{name_taken}     = 1 unless $name; #TODO
 
     my $params = {
         name        => $name,
@@ -50,9 +62,10 @@ sub create_submit {
         user        => $user,
         password    => $password,
         created_on  => DateTime->now()->datetime(q{ }),
-        status      => 'pending',
+	bug        => $bug,
     };
 
+    warn Data::Dumper::Dumper( $errors );
     if ( keys %$errors ) {
         $self->render(
             errors   => $errors,
@@ -63,7 +76,17 @@ sub create_submit {
 
     }
     else {
-        $self->sqlite->db->insert( 'sandboxes', $params );
+	DumpFile("/sandboxes/configs/$name.yml", {
+            KOHA_INSTANCE => $name,
+    	    GIT_USER_EMAIL=> $email,
+            GIT_USER_NAME => $user,
+	    KOHA_CONF => "/etc/koha/sites/$name/koha-conf.xml",
+	    BUG_NUMBER => $bug,
+	    NOTES => $notes,
+	    DESCRIPTION => $description,
+	    PASSWORD => $password,
+	    CREATED_ON => DateTime->now()->datetime(q{ }),
+        });
         $self->stash( { sandbox => $params } );
         $self->render( title => "Koha Sandbox Manager - Provision Sandbox" );
     }
@@ -72,34 +95,6 @@ sub create_submit {
 sub provision {
     my $self = shift;
     my $name = $self->stash('name');
-
-    #FIXME: Where should this live?
-    $self->minion->add_task(
-        "provision" => sub {
-            my ( $job, $name ) = @_;
-
-            $job->on(
-                finished => sub {
-                    my ( $job, $result ) = @_;
-
-                    $self->sqlite->db->update(
-                        'sandboxes',
-                        { status => 'provisioned' },
-                        { name   => $name }
-                    );
-
-                }
-            );
-
-            warn "EXECING";
-        qx( ansible-playbook -i 'localhost,' -c local --extra-vars 'instance_name=$name' /home/kyle/bws-development-ansible/create-sandbox-instance.yml >>/tmp/$name.log 2>&1 );
-            warn "DONE EXECING";
-
-        }
-    );
-
-    $self->minion->enqueue( provision => $name );
-#    $self->minion->perform_jobs;
 
     $self->render( json => { provisioning => 1 } );
 }
