@@ -8,15 +8,22 @@
     </div>
 [%- END %]
 
-<table class="table">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Status</th>
+            <th>Provision log</th>
+            <th>Docker log</th>
+            <th>Koha Plack error log</th>
             <th>Description</th>
             <th>Notes</th>
             <th>Creator</th>
             <th>Staff</th>
             <th>OPAC</th>
+            <th>Created</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
 
@@ -24,11 +31,36 @@
         [% FOREACH s IN sandboxes %]
             <tr>
                 <td>[% s.KOHA_INSTANCE %]</td>
+                <td>
+                    [% IF s.DELETE %]
+                        Deletion pending
+                    [% ELSIF s.PROVISION_COMPLETE %]
+                        Provisioned
+                    [% ELSIF s.PROVISIONED_ON %]
+                        Provisioning
+                    [% ELSE %]
+                        Provision pending
+                    [% END %]
+                </td>
+                <td><a class="btn btn-secondary" target="_blank" href="/provision_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Log</a></td>
+                <td><a class="btn btn-secondary" target="_blank" href="/docker_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Log</a></td>
+                <td><a class="btn btn-secondary" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Log</a></td>
                 <td>[% s.DESCRIPTION %]</td>
                 <td>[% s.NOTES %]</td>
                 <td>[% s.GIT_USER_NAME %]</td>
-                <td><a target="_blank" href="http://staff.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]">Staff</a></td>
-                <td><a target="_blank" href="http://opac.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]">OPAC</a></td>
+                <td><a class="btn btn-primary" target="_blank" href="http://staff.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a></td>
+                <td><a class="btn btn-primary" target="_blank" href="http://opac.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a></td>
+                <td>[% s.CREATED_ON %]</td>
+                <td>
+                    [% IF s.PROVISION_COMPLETE %]
+                        <a class="btn btn-warning" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
+                    [% END %]
+                </td>
+                <td>
+                    [% UNLESS s.DELETE %]
+                        <a class="btn btn-danger" href="/delete/[% s.KOHA_INSTANCE %]"><i class="fas fa-trash"></i> Delete</a>
+                    [% END %]
+                </td>
             </tr>
         [% END %]
     </tbody>

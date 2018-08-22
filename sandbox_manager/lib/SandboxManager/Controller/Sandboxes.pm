@@ -5,25 +5,28 @@ use Mojo::Base 'Mojolicious::Controller';
 use DateTime;
 use File::Slurp;
 use YAML qw{ LoadFile DumpFile };
+use Try::Tiny;
+
+our $sandboxes_dir = "/sandboxes";
+our $config_dir = "$sandboxes_dir/configs";
+our $logs_dir = "$sandboxes_dir/logs";
 
 sub list {
     my $self = shift;
 
     my @sandboxes;
 
-    my $dir = q{/sandboxes/configs/};
-    opendir(DIR, $dir);
+    opendir(DIR, $config_dir);
     while (my $file = readdir(DIR)) {
-        next unless (-f "$dir/$file");
+        next unless (-f "$config_dir/$file");
         next unless ($file =~ m/\.yml$/);
 
-        my $yaml = LoadFile( $dir . $file );
+        my $yaml = LoadFile( "$config_dir/$file" );
 
         push( @sandboxes, $yaml );
     }
 
     my $user_vars = LoadFile('../ansible/vars/user.yml');
-warn Data::Dumper::Dumper( $user_vars );
 
     $self->render(
         title           => "Koha Sandbox Manager",
@@ -65,7 +68,6 @@ sub create_submit {
 	bug        => $bug,
     };
 
-    warn Data::Dumper::Dumper( $errors );
     if ( keys %$errors ) {
         $self->render(
             errors   => $errors,
@@ -76,7 +78,7 @@ sub create_submit {
 
     }
     else {
-	DumpFile("/sandboxes/configs/$name.yml", {
+	DumpFile("$config_dir/$name.yml", {
             KOHA_INSTANCE => $name,
     	    GIT_USER_EMAIL=> $email,
             GIT_USER_NAME => $user,
@@ -87,30 +89,73 @@ sub create_submit {
 	    PASSWORD => $password,
 	    CREATED_ON => DateTime->now()->datetime(q{ }),
         });
-        $self->stash( { sandbox => $params } );
-        $self->render( title => "Koha Sandbox Manager - Provision Sandbox" );
+        $self->redirect_to('/');
     }
 }
 
-sub provision {
+sub delete {
     my $self = shift;
     my $name = $self->stash('name');
 
-    $self->render( json => { provisioning => 1 } );
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $sandbox = LoadFile("$config_dir/$name.yml");
+    $sandbox->{DELETE} = 1;
+    DumpFile("$config_dir/$name.yml", $sandbox);
+
+    $self->redirect_to('/');
+}
+
+sub restart_all {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    warn qx{ docker exec koha-$name /bin/bash -c "service koha-common restart" };
+    warn qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" };
+    warn qx{ docker exec koha-$name /bin/bash -c "service koha-common restart" };
+
+    $self->redirect_to('/');
 }
 
 sub provision_log {
     my $self = shift;
     my $name = $self->stash('name');
 
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
     my $text;
     try {
-        $text = read_file("/tmp/$name.log");
+        $text = read_file("$logs_dir/$name.log");
     }
     catch {
         $text = $_;
     };
 
-    $self->render( json => { text => $text } );
+    $self->render( text => "<pre>$text</pre>" );
 }
+
+sub docker_log {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $text = qx{ docker logs -t koha-$name };
+
+    $self->render( text => "<pre>$text</pre>" );
+}
+
+sub koha_log {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $text = qx{ docker exec koha-$name cat /var/log/koha/kohadev/plack-error.log };
+
+    $self->render( text => "<pre>$text</pre>" );
+}
+
 1;

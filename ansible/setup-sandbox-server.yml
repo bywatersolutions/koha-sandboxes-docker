@@ -63,6 +63,10 @@
         name: DateTime
     - cpanm:
         name: YAML
+    - cpanm:
+        name: Proc::Daemon
+    - cpanm:
+        name: Modern::Perl
 
     - name: Install "apache2" package
       apt:
