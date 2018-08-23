@@ -57,8 +57,16 @@
                 <td>[% s.NOTES %]</td>
                 <td>[% s.BUG_NUMBER %]</td>
                 <td>[% s.GIT_USER_NAME %]</td>
-                <td><a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a></td>
-                <td><a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a></td>
+                <td>
+                    [% IF s.PROVISION_COMPLETE %]
+                        <a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a>
+                    [% END %]
+                </td>
+                <td>
+                    [% IF s.PROVISION_COMPLETE %]
+                        <a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a>
+                    [% END %]
+                </td>
                 <td>[% s.CREATED_ON %]</td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
