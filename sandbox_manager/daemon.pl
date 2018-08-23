@@ -27,13 +27,20 @@ my $daemon = Proc::Daemon->new(
 # are you running?  Returns 0 if not.
 my $pid       = $daemon->Status($pf);
 my $daemonize = 0;
+my $start;
+my $stop;
+my $status;
 
 GetOptions(
-    'd|daemon' => \$daemonize,
-    "start"    => \&start,
-    "status"   => \&status,
-    "stop"     => \&stop
+    "d|daemon" => \$daemonize,
+    "start"    => \$start,
+    "status"   => \$status,
+    "stop"     => \$stop
 );
+
+start()  if $start;
+stop()   if $stop;
+status() if $status;
 
 sub stop {
     if ($pid) {
@@ -60,9 +67,14 @@ sub status {
 }
 
 sub start {
+warn "D: $daemonize";
     if ( !$pid ) {
-        say "Starting...";
-        $daemon->Init if $daemonize;
+	if ( $daemonize ) {
+	    say "Starting as daemon...";
+            $daemon->Init;
+	} else {
+            say "Starting...";
+	}
 
 	my $user_vars = LoadFile("$Bin/../ansible/vars/user.yml");
 
