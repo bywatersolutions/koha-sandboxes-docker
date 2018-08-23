@@ -21,7 +21,7 @@ Starting with a Debian 9 system:
 * Create and destroy Koha instances dyanmically
 * Web-based viewing of logs
 * Apply Koha bugs by community bug number
-* Test Koha branches from arbitrary git servers
+* Test Koha branches from arbitrary git repositories
 * Restart Koha services ( koha-common, apache, memached ) from the web
 * Re-index Zebra from the web
 * Delete the database and start fresh without reprovisioning from the web
