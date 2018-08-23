@@ -4,8 +4,9 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use DateTime;
 use File::Slurp;
-use YAML qw{ LoadFile DumpFile };
+use FindBin qw($Bin);
 use Try::Tiny;
+use YAML qw{ LoadFile DumpFile };
 
 our $sandboxes_dir = "/sandboxes";
 our $config_dir = "$sandboxes_dir/configs";
@@ -26,7 +27,7 @@ sub list {
         push( @sandboxes, $yaml );
     }
 
-    my $user_vars = LoadFile('../ansible/vars/user.yml');
+    my $user_vars = LoadFile("$Bin/../../ansible/vars/user.yml");
 
     $self->render(
         title           => "Koha Sandbox Manager",

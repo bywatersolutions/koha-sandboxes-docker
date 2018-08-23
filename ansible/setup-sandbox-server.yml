@@ -41,6 +41,12 @@
 #        update_cache: yes
 
   tasks:
+    - name: Find out playbook's parent directory path
+      shell: dirname "$PWD"
+      register: pwd_output
+    - debug: 
+      debug: var=pwd_output.stdout
+ 
     - name: Install "cpanminus" package
       apt:
         name: cpanminus
@@ -204,3 +210,12 @@
         state: started
         networks:
           - name: kohanet
+
+    - cron:
+        name: "Start sandbox manager"
+        minute: "*"
+        job: "{{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager daemon -m production -l http://*:3000 &"
+    - cron:
+        name: "Start sandbox daemon"
+        minute: "*"
+        job: "{{pwd_output.stdout}}/sandbox_manager/daemon.pl --start -d"

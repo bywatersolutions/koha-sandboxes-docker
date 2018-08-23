@@ -7,13 +7,14 @@ use Cwd qw( realpath getcwd );
 use Data::Dumper;
 use DateTime;
 use File::Spec::Functions;
+use FindBin qw($Bin);
 use Getopt::Long;
 use Proc::Daemon;
 use YAML qw( LoadFile DumpFile );
 
 my $config_dir = q{/sandboxes/configs};
 my $logs_dir   = q{/sandboxes/logs};
-my $script_dir = Cwd::realpath('..');
+my $script_dir = "$Bin/..";
 
 chdir($script_dir);
 
@@ -63,7 +64,7 @@ sub start {
         say "Starting...";
         $daemon->Init if $daemonize;
 
-	my $user_vars = LoadFile('ansible/vars/user.yml');
+	my $user_vars = LoadFile("$Bin/../ansible/vars/user.yml");
 
         while (1) {
             opendir( DIR, $config_dir );
