@@ -1,13 +1,5 @@
 [% INCLUDE wrapper_top.html.tt2 %]
 
-<h2>Sandboxes</h2>
-
-[%- IF sandbox_created %]
-    <div class="alert alert-success" role="alert">
-        Sandbox created!
-    </div>
-[%- END %]
-
 <table class="table table-striped table-hover">
     <thead>
         <tr>
