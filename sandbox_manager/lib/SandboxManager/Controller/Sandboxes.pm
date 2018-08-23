@@ -51,6 +51,8 @@ sub create_submit {
     my $email       = $self->param('email');
     my $password    = $self->param('password');
     my $bug         = $self->param('bug');
+    my $git_remote  = $self->param('git_remote');
+    my $git_branch  = $self->param('git_branch');
 
     my $errors = {};
     $errors->{name_required}  = 1 unless $name;
@@ -58,20 +60,9 @@ sub create_submit {
     $errors->{email_required} = 1 unless $email;
     $errors->{name_taken}     = 1 unless $name; #TODO
 
-    my $params = {
-        name        => $name,
-        description => $description,
-        notes       => $notes,
-        user        => $user,
-        password    => $password,
-        created_on  => DateTime->now()->datetime(q{ }),
-	bug        => $bug,
-    };
-
     if ( keys %$errors ) {
         $self->render(
             errors   => $errors,
-            params   => $params,
             title    => "Koha Sandbox Manager",
             template => 'sandboxes/create_form',
         );
@@ -84,6 +75,8 @@ sub create_submit {
             GIT_USER_NAME => $user,
 	    KOHA_CONF => "/etc/koha/sites/$name/koha-conf.xml",
 	    BUG_NUMBER => $bug,
+	    GIT_REMOTE => $git_remote,
+	    GIT_BRANCH => $git_branch,
 	    NOTES => $notes,
 	    DESCRIPTION => $description,
 	    PASSWORD => $password,

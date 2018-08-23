@@ -48,6 +48,14 @@
       </div>
 
       <div class="form-group">
+        <label for="git_remote">Git git_remote & git_branch</label>
+        <input type="text" class="form-control" name="git_remote" id="git_remote" aria-describedby="git_remoteHelp" placeholder="Enter repository url" value="[% params.git_remote %]">
+        <br/>
+        <input type="text" class="form-control" name="git_branch" id="git_branch" aria-describedby="git_branchHelp" placeholder="Enter name of branch" value="[% params.git_branch %]">
+        <small id="git_remoteHelp" class="form-text text-muted">Enter a Koha git remote address and branch here and it will be applied to your sandbox.</small>
+      </div>
+
+      <div class="form-group">
         <label for="name">Description</label>
         <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter description" value="[% input.description %]">
         <small id="descriptionHelp" class="form-text text-muted">Enter a basic description, optional.</small>
@@ -61,7 +69,7 @@
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" placeholder="Enter password" value="">
+        <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" placeholder="" value="">
         <small id="passwordHelp" class="form-text text-muted">Password protect from deletion, optional.</small>
       </div>
 
