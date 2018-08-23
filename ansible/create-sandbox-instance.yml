@@ -4,16 +4,15 @@
   become: true
 
   handlers:
-    -
-      name: "Restart apache"
+    - name: "Restart apache"
       service: "name=apache2 state=restarted"
-    -
-      name: "Enable apache site"
+
+    - name: "Enable apache site"
       shell: a2ensite {{ KOHA_INSTANCE }}
       notify:
         - "Restart apache"
-    -
-      name: "Install koha git config"
+
+    - name: "Install koha git config"
       copy:
         dest: /usr/local/src/koha/.git/config
         mode: 365
@@ -21,12 +20,20 @@
         src: files/git/config
       notify:
         - "Update koha git repo"
-    -
-      name: "Update koha git repo"
+
+    - name: "Update koha git repo"
       shell: "cd /usr/local/src/koha && yes | git fetch --all"
-    -
-      name: "Update koha git repo for sandbox"
+
+    - name: "Update koha git repo for sandbox"
       shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all"
+
+    - name: "Restart plack in docker container"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
+
+    - name: "Run updatedatabase.pl in docker container"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-shell -c '/kohadevbox/koha/installer/data/mysql/updatedatabase.pl' {{ KOHA_INSTANCE }}"
 
   vars_files:
       - vars/defaults.yml
@@ -142,63 +149,41 @@
         dest: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
       notify: "Enable apache site"
 
-    - debug:
-        msg: "Will apply bug number {{ BUG_NUMBER }} in 1 minute"
-      when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-    - name: "Pause for koha container to set itself up"
+    - name: "Will apply bug number {{ BUG_NUMBER }} in 1 minute"
       pause:
         minutes: 1
       when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-    - name: "Add this docker container to ansible hosts"
+    - name: "Add docker container koha-{{ KOHA_INSTANCE }} to ansible hosts"
       add_host:
         name: "koha-{{ KOHA_INSTANCE }}"
         groups: koha
         ansible_connection: docker
       changed_when: false
-    - debug:
-        msg: "Applying bug number {{ BUG_NUMBER }}"
-      when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-    - name: "Apply bug via git-bz in docker container"
+    - name: "Apply bug {{ BUG_NUMBER }} via git-bz in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
       shell: "cd /kohadevbox/koha && yes | git bz apply {{ BUG_NUMBER }}"
       when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
       ignore_errors: yes
-    - name: "Run updatedatabase.pl in docker container"
-      delegate_to: "koha-{{ KOHA_INSTANCE }}"
-      shell: "koha-shell -c '/kohadevbox/koha/installer/data/mysql/updatedatabase.pl' {{ KOHA_INSTANCE }}"
-      when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-    - name: "Restart plack in docker container"
-      delegate_to: "koha-{{ KOHA_INSTANCE }}"
-      shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
-      when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
+      notify:
+        - "Restart plack in docker container"
+        - "Run updatedatabase.pl in docker container"
 
-    - debug:
-        msg: "Will check out git remote {{ GIT_REMOTE }} and branch {{ GIT_BRANCH }}"
-      when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '') and not(GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
-    - name: "Pause for koha container to set itself up, before applying git remote and branch"
+    - name: "Pause for koha container to set itself up, before applying git remote {{ GIT_REMOTE }} and branch {{ GIT_BRANCH }}"
       pause:
         minutes: 1
       when: ( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-    - name: "Add this docker container to ansible hosts"
+    - name: "Add docker container koha-{{ KOHA_INSTANCE }} to ansible hosts"
       add_host:
         name: "koha-{{ KOHA_INSTANCE }}"
         groups: koha
         ansible_connection: docker
       changed_when: false
-    - debug:
-        msg: "Applying git remote {{ GIT_REMOTE }} and branch {{ GIT_BRANCH }}"
-      when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '') and not(GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
     - name: "Add git remote {{ GIT_REMOTE }} as {{ KOHA_INSTANCE }}"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
       shell: "cd /kohadevbox/koha && git remote add {{ KOHA_INSTANCE }} {{ GIT_REMOTE }} && git fetch {{ KOHA_INSTANCE }} && git checkout {{ KOHA_INSTANCE }}/{{ GIT_BRANCH }}"
       when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '') and not(GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
       ignore_errors: yes
-    - name: "Run updatedatabase.pl in docker container"
-      delegate_to: "koha-{{ KOHA_INSTANCE }}"
-      shell: "koha-shell -c '/kohadevbox/koha/installer/data/mysql/updatedatabase.pl' {{ KOHA_INSTANCE }}"
-      when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '') and not(GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
-    - name: "Restart plack in docker container"
-      delegate_to: "koha-{{ KOHA_INSTANCE }}"
-      shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
-      when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '') and not(GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
+      notify:
+        - "Restart plack in docker container"
+        - "Run updatedatabase.pl in docker container"
 
