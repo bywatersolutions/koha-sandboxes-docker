@@ -57,8 +57,8 @@
                 <td>[% s.NOTES %]</td>
                 <td>[% s.BUG_NUMBER %]</td>
                 <td>[% s.GIT_USER_NAME %]</td>
-                <td><a class="btn btn-primary" target="_blank" href="http://staff.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a></td>
-                <td><a class="btn btn-primary" target="_blank" href="http://opac.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a></td>
+                <td><a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a></td>
+                <td><a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a></td>
                 <td>[% s.CREATED_ON %]</td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
@@ -69,6 +69,7 @@
                             <div class="dropdown-menu" aria-labelledby="btnGroupDropActions">
                                 <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
                                 <a class="dropdown-item" target="_blank" href="/reindex_full/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Full Zebra Reindex</a>
+                                <a class="dropdown-item" target="_blank" href="/clear_database/[% s.KOHA_INSTANCE %]"><i class="fas fa-database"></i> Clear database</a>
                             </div>
                         </div>
                     [% END %]

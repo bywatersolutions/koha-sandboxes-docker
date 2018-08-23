@@ -108,6 +108,7 @@ sub restart_all {
     my $output = qx{ docker exec koha-$name /bin/bash -c "service koha-common stop" }    . "\n";
     $output   .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" }   . "\n";
     $output   .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }      . "\n";
+    $output   .= qx{ docker restart memcached } . "\n";
 
     $self->render( title => "Restart services", text => "<pre>$output</pre>" );
 }
@@ -118,7 +119,22 @@ sub reindex_full {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-rebuild-zebra -f -v kohadev" } . "\n";
+    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-rebuild-zebra -f -v $name" } . "\n";
+
+    $self->render( title => "Full Zebra Reindex", text => "<pre>$output</pre>" );
+}
+
+sub clear_database {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-mysql test <<< 'DROP DATABASE koha_test; CREATE DATABASE koha_$name;'" } . "\n";
+    $output   .= qx{ docker exec koha-$name /bin/bash -c "service koha-common stop" }    . "\n";
+    $output   .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" }   . "\n";
+    $output   .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }      . "\n";
+    $output   .= qx{ docker restart memcached } . "\n";
 
     $self->render( title => "Full Zebra Reindex", text => "<pre>$output</pre>" );
 }

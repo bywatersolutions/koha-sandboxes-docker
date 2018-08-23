@@ -29,6 +29,7 @@ sub startup {
   $r->any('/delete/:name')->to('sandboxes#delete');
   $r->any('/restart_all/:name')->to('sandboxes#restart_all');
   $r->any('/reindex_full/:name')->to('sandboxes#reindex_full');
+  $r->any('/clear_database/:name')->to('sandboxes#clear_database');
 }
 
 1;
