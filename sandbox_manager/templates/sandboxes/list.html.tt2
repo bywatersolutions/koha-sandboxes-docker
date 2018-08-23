@@ -21,7 +21,7 @@
             <th>Staff</th>
             <th>OPAC</th>
             <th>Created</th>
-            <th>&nbsp;</th>
+            <th>Actions</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
@@ -62,7 +62,15 @@
                 <td>[% s.CREATED_ON %]</td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
-                        <a class="btn btn-warning" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
+                        <div class="btn-group" role="group">
+                           <button id="btnGroupDropActions" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-file-alt"></i> Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDropActions">
+                                <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
+                                <a class="dropdown-item" target="_blank" href="/reindex_full/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Full Zebra Reindex</a>
+                            </div>
+                        </div>
                     [% END %]
                 </td>
                 <td>

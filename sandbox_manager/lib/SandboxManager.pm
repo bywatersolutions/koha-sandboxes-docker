@@ -28,6 +28,7 @@ sub startup {
   $r->any('/koha_log/:name')->to('sandboxes#koha_log');
   $r->any('/delete/:name')->to('sandboxes#delete');
   $r->any('/restart_all/:name')->to('sandboxes#restart_all');
+  $r->any('/reindex_full/:name')->to('sandboxes#reindex_full');
 }
 
 1;

@@ -116,7 +116,18 @@ sub restart_all {
     $output   .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" }   . "\n";
     $output   .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }      . "\n";
 
-    $self->render( text => "<pre>$output</pre>" );
+    $self->render( title => "Restart services", text => "<pre>$output</pre>" );
+}
+
+sub reindex_full {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-rebuild-zebra -f -v kohadev" } . "\n";
+
+    $self->render( title => "Full Zebra Reindex", text => "<pre>$output</pre>" );
 }
 
 sub provision_log {
@@ -133,7 +144,7 @@ sub provision_log {
         $text = $_;
     };
 
-    $self->render( text => "<pre>$text</pre>" );
+    $self->render( title => "Provision log", text => "<pre>$text</pre>" );
 }
 
 sub docker_log {
@@ -144,7 +155,7 @@ sub docker_log {
 
     my $text = qx{ docker logs -t koha-$name };
 
-    $self->render( text => "<pre>$text</pre>" );
+    $self->render( title => "Docker log", text => "<pre>$text</pre>" );
 }
 
 sub koha_log {
@@ -155,7 +166,7 @@ sub koha_log {
 
     my $text = qx{ docker exec koha-$name cat /var/log/koha/kohadev/plack-error.log };
 
-    $self->render( text => "<pre>$text</pre>" );
+    $self->render( title => "Koha log", text => "<pre>$text</pre>" );
 }
 
 1;
