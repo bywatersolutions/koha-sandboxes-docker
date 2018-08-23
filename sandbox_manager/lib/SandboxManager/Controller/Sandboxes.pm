@@ -112,11 +112,11 @@ sub restart_all {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    warn qx{ docker exec koha-$name /bin/bash -c "service koha-common restart" };
-    warn qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" };
-    warn qx{ docker exec koha-$name /bin/bash -c "service koha-common restart" };
+    my $output = qx{ docker exec koha-$name /bin/bash -c "service koha-common stop" }    . "\n";
+    $output   .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" }   . "\n";
+    $output   .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }      . "\n";
 
-    $self->redirect_to('/');
+    $self->render( text => "<pre>$output</pre>" );
 }
 
 sub provision_log {

@@ -62,7 +62,7 @@
                 <td>[% s.CREATED_ON %]</td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
-                        <a class="btn btn-warning" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
+                        <a class="btn btn-warning" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
                     [% END %]
                 </td>
                 <td>
