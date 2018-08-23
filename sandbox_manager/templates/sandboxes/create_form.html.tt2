@@ -37,7 +37,7 @@
 
       <div class="form-group">
         <label for="name">Sandbox name</label>
-        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[_a-zA-Z0-9-]+" value="[% params.name %]" required>
+        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[_a-zA-Z0-9-]+" maxlength="11" value="[% params.name %]" required>
         <small id="nameHelp" class="form-text text-muted">Enter a simple name for your sandbox, lower case all letters and numbers, dashes and underscores.</small>
       </div>
 
