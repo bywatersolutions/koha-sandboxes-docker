@@ -13,11 +13,10 @@
         <tr>
             <th>Name</th>
             <th>Status</th>
-            <th>Provision log</th>
-            <th>Docker log</th>
-            <th>Koha Plack error log</th>
+            <th>Logs</th>
             <th>Description</th>
             <th>Notes</th>
+            <th>Bug #</th>
             <th>Creator</th>
             <th>Staff</th>
             <th>OPAC</th>
@@ -42,11 +41,21 @@
                         Provision pending
                     [% END %]
                 </td>
-                <td><a class="btn btn-secondary" target="_blank" href="/provision_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Log</a></td>
-                <td><a class="btn btn-secondary" target="_blank" href="/docker_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Log</a></td>
-                <td><a class="btn btn-secondary" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Log</a></td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDropLogs" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-file-alt"></i> Logs
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDropLogs">
+                            <a class="dropdown-item" target="_blank" href="/provision_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Provision log</a>
+                            <a class="dropdown-item" target="_blank" href="/docker_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Docker log</a>
+                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Koha Plack Log</a>
+                        </div>
+                    </div>
+                </td>
                 <td>[% s.DESCRIPTION %]</td>
                 <td>[% s.NOTES %]</td>
+                <td>[% s.BUG_NUMBER %]</td>
                 <td>[% s.GIT_USER_NAME %]</td>
                 <td><a class="btn btn-primary" target="_blank" href="http://staff.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a></td>
                 <td><a class="btn btn-primary" target="_blank" href="http://opac.[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a></td>
