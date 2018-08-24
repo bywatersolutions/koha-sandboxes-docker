@@ -29,8 +29,14 @@
               <li class="nav-item active">
               <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/create">Create</a>
-              </li>
+              [% IF view == 'list' %]
+                  <li class="nav-item">
+                      [% IF sandboxes.size >= user_vars.MAX_SANDBOXES %]
+                          <a class="nav-link" href="#" title="The maximum number of sandboxes have been created. A sandbox must be deleted before a new one can be created"><s>Create</s></a>
+                      [% ELSE %]
+                        <a class="nav-link" href="/create">Create</a>
+                      [% END %]
+                  </li>
+	      [% END %]
           </div>
         </nav>

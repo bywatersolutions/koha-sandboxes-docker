@@ -11,6 +11,7 @@ use YAML qw{ LoadFile DumpFile };
 our $sandboxes_dir = "/sandboxes";
 our $config_dir = "$sandboxes_dir/configs";
 our $logs_dir = "$sandboxes_dir/logs";
+our $user_vars = LoadFile("$Bin/../../ansible/vars/user.yml");
 
 sub list {
     my $self = shift;
@@ -27,23 +28,26 @@ sub list {
         push( @sandboxes, $yaml );
     }
 
-    my $user_vars = LoadFile("$Bin/../../ansible/vars/user.yml");
-
     $self->render(
         title           => "Koha Sandbox Manager",
         sandboxes       => \@sandboxes,
         user_vars       => $user_vars,
+	view            => 'list',
     );
 }
 
 sub create_form {
     my $self = shift;
 
+    $self->redirect_to('/') if $self->max_sandboxes_reached;
+
     $self->render( title => "Koha Sandbox Manager - Create Sandbox", );
 }
 
 sub create_submit {
     my $self = shift;
+
+    $self->redirect_to('/') if $self->max_sandboxes_reached;
 
     my $name        = $self->param('name');
     my $description = $self->param('description');
@@ -95,7 +99,6 @@ sub signoff_form {
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
     my $sandbox = LoadFile("$config_dir/$name.yml");
-    warn Data::Dumper::Dumper( $sandbox );
 
     $self->render( title => "Koha Sandbox Manager - Sign off patches", sandbox => $sandbox );
 }
@@ -206,6 +209,14 @@ sub koha_log {
     my $text = qx{ docker exec koha-$name cat /var/log/koha/kohadev/plack-error.log };
 
     $self->render( title => "Koha log", text => "<pre>$text</pre>" );
+}
+
+sub max_sandboxes_reached {
+    opendir my $dh, $config_dir;
+    my $count = () = readdir($dh);
+    closedir $dh;
+
+    return $count >= $user_vars->{MAX_SANDBOXES};
 }
 
 1;

@@ -27,7 +27,6 @@ Starting with a Debian 9 system:
 * Delete the database and start fresh without reprovisioning from the web
 
 ## Future Goals
-* Limit the number of instances that can be created at one time ( prevent deletion and/or delete oldest existing instance )
 * Add ability to select a pre-generated database list ( also we need to generate those databases )
 * Allow ssh to koha containers, either through web or cli
 * Dockerize such that sandbox host needs only Docker. Ansible, the web app, and the daemon will run from a container and steer the host Docker daemon via Ansible.
