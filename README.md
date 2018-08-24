@@ -20,6 +20,7 @@ Starting with a Debian 9 system:
 ## Features
 * Create and destroy Koha instances dyanmically
 * Web-based viewing of logs
+* Ability to sign off bugs from web
 * Apply Koha bugs by community bug number
 * Test Koha branches from arbitrary git repositories
 * Restart Koha services ( koha-common, apache, memached ) from the web
