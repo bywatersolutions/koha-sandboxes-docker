@@ -41,7 +41,10 @@
                         <div class="dropdown-menu" aria-labelledby="btnGroupDropLogs">
                             <a class="dropdown-item" target="_blank" href="/provision_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Provision log</a>
                             <a class="dropdown-item" target="_blank" href="/docker_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Docker log</a>
-                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Koha Plack Log</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Koha plack Log</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" target="_blank" href="/git_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Koha git Log</a>
                         </div>
                     </div>
                 </td>

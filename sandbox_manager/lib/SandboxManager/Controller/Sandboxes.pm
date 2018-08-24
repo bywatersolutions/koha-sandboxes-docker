@@ -116,7 +116,7 @@ sub signoff_submit {
     my $output = q{};
     $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number 21231" }    . "\n";
 
-    $self->render( title => "Koha Sandbox Manager - Sign off patches", text => "<pre>$output</pre>" );
+    $self->render( title => "Koha Sandbox Manager - Sign off patches", text => $output, format => 'txt' );
 }
 
 sub delete {
@@ -143,7 +143,7 @@ sub restart_all {
     $output   .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }      . "\n";
     $output   .= qx{ docker restart memcached } . "\n";
 
-    $self->render( title => "Restart services", text => "<pre>$output</pre>" );
+    $self->render( title => "Restart services", text => $output, format => 'txt' );
 }
 
 sub reindex_full {
@@ -154,7 +154,7 @@ sub reindex_full {
 
     my $output = qx{ docker exec koha-$name /bin/bash -c "koha-rebuild-zebra -f -v $name" } . "\n";
 
-    $self->render( title => "Full Zebra Reindex", text => "<pre>$output</pre>" );
+    $self->render( title => "Full Zebra Reindex", text => $output, format => 'txt' );
 }
 
 sub clear_database {
@@ -169,7 +169,7 @@ sub clear_database {
     $output   .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }      . "\n";
     $output   .= qx{ docker restart memcached } . "\n";
 
-    $self->render( title => "Full Zebra Reindex", text => "<pre>$output</pre>" );
+    $self->render( title => "Full Zebra Reindex", text => $output, format => 'txt' );
 }
 
 sub provision_log {
@@ -186,7 +186,7 @@ sub provision_log {
         $text = $_;
     };
 
-    $self->render( title => "Provision log", text => "<pre>$text</pre>" );
+    $self->render( title => "Provision log", text => $text, format => 'txt' );
 }
 
 sub docker_log {
@@ -197,7 +197,7 @@ sub docker_log {
 
     my $text = qx{ docker logs -t koha-$name };
 
-    $self->render( title => "Docker log", text => "<pre>$text</pre>" );
+    $self->render( title => "Docker log", text => $text, format => 'txt' );
 }
 
 sub koha_log {
@@ -208,13 +208,24 @@ sub koha_log {
 
     my $text = qx{ docker exec koha-$name cat /var/log/koha/kohadev/plack-error.log };
 
-    $self->render( title => "Koha log", text => "<pre>$text</pre>" );
+    $self->render( title => "Koha log", text => $text, format => 'txt' );
+}
+
+sub git_log {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $text = qx{ docker exec koha-$name bash -c "cd /kohadevbox/koha && git log HEAD~50..HEAD" };
+
+    $self->render( title => "Koha git log", text => $text, format => 'txt' );
 }
 
 sub max_sandboxes_reached {
-    opendir my $dh, $config_dir;
+    opendir( my $dh, $config_dir );
     my $count = () = readdir($dh);
-    closedir $dh;
+    closedir($dh);
 
     return $count >= $user_vars->{MAX_SANDBOXES};
 }
