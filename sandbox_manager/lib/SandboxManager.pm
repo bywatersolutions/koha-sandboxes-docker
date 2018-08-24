@@ -23,6 +23,8 @@ sub startup {
   $r->get('/')->to('sandboxes#list');
   $r->get('/create')->to('sandboxes#create_form');
   $r->post('/create')->to('sandboxes#create_submit');
+  $r->get('/signoff/:name')->to('sandboxes#signoff_form');
+  $r->post('/signoff/:name')->to('sandboxes#signoff_submit');
   $r->any('/provision_log/:name')->to('sandboxes#provision_log');
   $r->any('/docker_log/:name')->to('sandboxes#docker_log');
   $r->any('/koha_log/:name')->to('sandboxes#koha_log');

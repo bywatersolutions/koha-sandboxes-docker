@@ -70,6 +70,8 @@
                                 <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
                                 <a class="dropdown-item" target="_blank" href="/reindex_full/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Full Zebra Reindex</a>
                                 <a class="dropdown-item" target="_blank" href="/clear_database/[% s.KOHA_INSTANCE %]"><i class="fas fa-database"></i> Clear database</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" target="_blank" href="/signoff/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Sign-off patches</a>
                             </div>
                         </div>
                     [% END %]
