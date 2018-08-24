@@ -27,7 +27,7 @@ sub startup {
   $r->post('/signoff/:name')->to('sandboxes#signoff_submit');
   $r->any('/provision_log/:name')->to('sandboxes#provision_log');
   $r->any('/docker_log/:name')->to('sandboxes#docker_log');
-  $r->any('/koha_log/:name')->to('sandboxes#koha_log');
+  $r->any('/koha_log/:name/:file')->to('sandboxes#koha_log');
   $r->any('/git_log/:name')->to('sandboxes#git_log');
   $r->any('/delete/:name')->to('sandboxes#delete');
   $r->any('/restart_all/:name')->to('sandboxes#restart_all');
