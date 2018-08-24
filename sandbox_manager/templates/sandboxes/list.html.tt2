@@ -67,7 +67,7 @@
                     [% IF s.PROVISION_COMPLETE %]
                         <div class="btn-group" role="group">
                            <button id="btnGroupDropActions" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-file-alt"></i> Actions
+                                <i class="fas fa-exchange-alt"></i> Actions
                             </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDropActions">
                                 <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
