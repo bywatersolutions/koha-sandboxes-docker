@@ -214,8 +214,8 @@
     - cron:
         name: "Start sandbox manager"
         minute: "*"
-        job: "{{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager daemon -m production -l http://*:3000 &"
+        job: "{{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager daemon -m production -l http://*:3000 > /dev/null 2>&1 &"
     - cron:
         name: "Start sandbox daemon"
         minute: "*"
-        job: "{{pwd_output.stdout}}/sandbox_manager/daemon.pl --start -d"
+        job: "{{pwd_output.stdout}}/sandbox_manager/daemon.pl --start -d > /dev/null 2>&1"
