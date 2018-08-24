@@ -48,7 +48,7 @@
       </div>
 
       <div class="form-group">
-        <label for="git_remote">Git git_remote & git_branch</label>
+        <label for="git_remote">Git remote & branch</label>
         <input type="text" class="form-control" name="git_remote" id="git_remote" aria-describedby="git_remoteHelp" placeholder="Enter repository url" value="[% params.git_remote %]">
         <br/>
         <input type="text" class="form-control" name="git_branch" id="git_branch" aria-describedby="git_branchHelp" placeholder="Enter name of branch" value="[% params.git_branch %]">
