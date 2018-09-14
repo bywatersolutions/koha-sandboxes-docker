@@ -142,7 +142,7 @@
       template:
         src: templates/sandbox_instance.conf.j2
         dest: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
-      notify: "Enable apache site"
+      notify: "Restart apache"
 
     - name: "Symlink the new apache config from sites-available to sites-enabled"
       file:
@@ -151,6 +151,7 @@
         owner: root
         group: root
         state: link
+      notify: "Restart apache"
 
     - name: "Will apply bug number {{ BUG_NUMBER }} in 1 minute"
       pause:
@@ -190,3 +191,5 @@
         - "Restart plack in docker container"
         - "Run updatedatabase.pl in docker container"
 
+    - name: "Restart apache, one last time"
+      service: "name=apache2 state=restarted"

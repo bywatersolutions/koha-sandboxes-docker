@@ -58,3 +58,6 @@
         path: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
         state: absent
       notify: "Restart apache"
+
+    - name: "Restart apache, one last time"
+      service: "name=apache2 state=restarted"
