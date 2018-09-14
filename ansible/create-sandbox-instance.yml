@@ -149,6 +149,14 @@
         dest: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
       notify: "Enable apache site"
 
+    - name: "Symlink the new apache config from sites-available to sites-enabled"
+      file:
+        src: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
+        dest: /etc/apache2/sites-enabled/{{ KOHA_INSTANCE }}.conf
+        owner: root
+        group: root
+        state: link
+
     - name: "Will apply bug number {{ BUG_NUMBER }} in 1 minute"
       pause:
         minutes: 1
