@@ -67,7 +67,6 @@ sub status {
 }
 
 sub start {
-warn "D: $daemonize";
     if ( !$pid ) {
 	if ( $daemonize ) {
 	    say "Starting as daemon...";
