@@ -7,11 +7,6 @@
     - name: "Restart apache"
       service: "name=apache2 state=restarted"
 
-    - name: "Enable apache site"
-      shell: a2ensite {{ KOHA_INSTANCE }}
-      notify:
-        - "Restart apache"
-
     - name: "Install koha git config"
       copy:
         dest: /usr/local/src/koha/.git/config
