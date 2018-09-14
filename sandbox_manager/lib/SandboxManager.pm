@@ -25,6 +25,8 @@ sub startup {
   $r->post('/create')->to('sandboxes#create_submit');
   $r->get('/signoff/:name')->to('sandboxes#signoff_form');
   $r->post('/signoff/:name')->to('sandboxes#signoff_submit');
+  $r->get('/apply_bug/:name')->to('sandboxes#apply_bug_form');
+  $r->post('/apply_bug/:name')->to('sandboxes#apply_bug_submit');
   $r->any('/provision_log/:name')->to('sandboxes#provision_log');
   $r->any('/docker_log/:name')->to('sandboxes#docker_log');
   $r->any('/koha_log/:name/:file')->to('sandboxes#koha_log');

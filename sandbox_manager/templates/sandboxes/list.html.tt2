@@ -77,6 +77,8 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" target="_blank" href="/clear_database/[% s.KOHA_INSTANCE %]"><i class="fas fa-database"></i> Clear database</a>
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" target="_blank" href="/apply_bug/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Apply patches</a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" target="_blank" href="/signoff/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Sign-off patches</a>
                             </div>
                         </div>

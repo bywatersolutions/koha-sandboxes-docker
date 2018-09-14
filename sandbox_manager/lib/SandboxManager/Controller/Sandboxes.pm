@@ -129,6 +129,39 @@ sub signoff_submit {
     );
 }
 
+sub apply_bug_form {
+    my $self = shift;
+
+    my $name = $self->param('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $sandbox = LoadFile("$config_dir/$name.yml");
+
+    $self->render(
+        title   => "Koha Sandbox Manager - Apply bug patches",
+        sandbox => $sandbox
+    );
+}
+
+sub apply_bug_submit {
+    my $self = shift;
+
+    my $name = $self->param('name');
+    my $bug = $self->param('bug');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = q{};
+    $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && yes | git bz apply $bug" } . "\n";
+
+    $self->render(
+        title  => "Koha Sandbox Manager - Sign off patches",
+        text   => $output,
+        format => 'txt'
+    );
+}
+
 sub delete {
     my $self = shift;
     my $name = $self->stash('name');

@@ -1,0 +1,21 @@
+[% INCLUDE wrapper_top.html.tt2 %]
+
+<div class="container">
+    <h2>Apply patch to sandbox</h2>
+
+    <form id="create-sandbox" method="post" action="[% c.url_for('/apply_bug') %]/[% sandbox.KOHA_INSTANCE %]">
+      <div class="form-group">
+        <label for="bug">Bug number</label>
+        <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="" required />
+        <small id="bugHelp" class="form-text text-muted">Community bug number from which to apply patches.</small>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("bug").focus();
+</script>
+
+[% INCLUDE wrapper_bottom.html.tt2 %]
