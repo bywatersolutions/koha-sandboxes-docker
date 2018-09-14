@@ -47,8 +47,14 @@
         path: /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}
         state: absent
 
-    - name: "Remove apache config for sandbox instance"
+    - name: "Remove apache config symlink for sandbox instance"
       file:
         path: /etc/apache2/sites-enabled/{{ KOHA_INSTANCE }}.conf
+        state: absent
+      notify: "Restart apache"
+
+    - name: "Remove apache config for sandbox instance"
+      file:
+        path: /etc/apache2/sites-available/{{ KOHA_INSTANCE }}.conf
         state: absent
       notify: "Restart apache"
