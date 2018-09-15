@@ -167,7 +167,7 @@
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
       shell: "cd /kohadevbox/koha && yes | git bz apply {{ BUG_NUMBER }}"
       when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-      ignore_errors: yes
+      ignore_errors: no
       notify:
         - "Restart plack in docker container"
         - "Run updatedatabase.pl in docker container"
