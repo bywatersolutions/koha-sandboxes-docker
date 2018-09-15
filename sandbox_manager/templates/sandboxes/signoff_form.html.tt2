@@ -6,19 +6,19 @@
     <form id="create-sandbox" method="post" action="[% c.url_for('/signoff') %]/[% sandbox.KOHA_INSTANCE %]">
       <div class="form-group">
         <label for="name">Your name</label>
-        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% sandbox.GIT_USER_NAME %]" required readonly>
+        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% sandbox.GIT_USER_NAME %]" required>
         <small id="nameHelp" class="form-text text-muted">Your name will be used for signing off on patches.</small>
       </div>
 
       <div class="form-group">
         <label for="email">Your email</label>
-        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter your email address" value="[% sandbox.GIT_USER_EMAIL %]" required readonly>
+        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter your email address" value="[% sandbox.GIT_USER_EMAIL %]" required>
         <small id="emailHelp" class="form-text text-muted">Your email address will be used for signing off on patches.</small>
       </div>
 
       <div class="form-group">
         <label for="bug">Bug number</label>
-        <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="[% sandbox.BUG_NUMBER %]" required readonly>
+        <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="[% sandbox.BUG_NUMBER %]" required>
         <small id="bugHelp" class="form-text text-muted">Signed off patches will be attached to this community bug report.</small>
       </div>
 
