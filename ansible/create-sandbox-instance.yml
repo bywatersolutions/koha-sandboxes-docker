@@ -191,5 +191,18 @@
         - "Restart plack in docker container"
         - "Run updatedatabase.pl in docker container"
 
+    - name: "Index the records for the first time"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-rebuild-zebra -f -a -b -v {{ KOHA_INSTANCE }}"
+      ignore_errors: yes
+    - name: "Restart Zebra after indexing records"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-zebra --restart {{ KOHA_INSTANCE }}"
+      ignore_errors: yes
+    - name: "Restart Plack after indexing records"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
+      ignore_errors: yes
+
     - name: "Restart apache, one last time"
       service: "name=apache2 state=restarted"
