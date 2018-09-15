@@ -214,7 +214,7 @@ sub clear_database {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-mysql test <<< 'DROP DATABASE koha_test; CREATE DATABASE koha_$name;'" } . "\n";
+    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-mysql $name <<< 'DROP DATABASE koha_$name; CREATE DATABASE koha_$name;'" } . "\n";
     $output .= qx{ docker exec koha-$name /bin/bash -c "service koha-common stop" }  . "\n";
     $output .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" } . "\n";
     $output .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
