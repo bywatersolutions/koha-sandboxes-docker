@@ -28,6 +28,11 @@
         <small id="numberHelp" class="form-text text-muted">Enter the number of patches that you are signing off.</small>
       </div>
 
+      <div class="alert alert-info" role="alert">
+          At this time, the sign-off tool does not automatically set the status of the community bug report to "signed-off".
+          Please make sure the bug report status gets updated!
+      </div>
+
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
