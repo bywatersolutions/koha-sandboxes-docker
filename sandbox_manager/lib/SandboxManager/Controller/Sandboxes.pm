@@ -47,6 +47,11 @@ sub create_form {
 sub create_submit {
     my $self = shift;
 
+    if ( lc($self->param('captcha')) ne 'koha' ) {
+        $self->render( text => 'Failed captcha', status => 403 );
+	return;
+    }
+
     $self->redirect_to('/') if $self->max_sandboxes_reached;
 
     my $name        = $self->param('name');
@@ -111,6 +116,11 @@ sub signoff_form {
 
 sub signoff_submit {
     my $self = shift;
+
+    if ( lc($self->param('captcha')) ne 'koha' ) {
+        $self->render( text => 'Failed captcha', status => 403 );
+	return;
+    }
 
     my $name   = $self->param('name');
     my $user   = $self->param('user');

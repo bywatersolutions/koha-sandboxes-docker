@@ -28,6 +28,12 @@
         <small id="numberHelp" class="form-text text-muted">Enter the number of patches that you are signing off.</small>
       </div>
 
+      <div class="form-group">
+        <label for="captcha">What was the world's first open source ILS?</label>
+        <input type="captcha" class="form-control" name="captcha" id="captcha" aria-describedby="captchaHelp" required>
+        <small id="captchaHelp" class="form-text text-muted">The answer is in the upper left corner of this page.</small>
+      </div>
+
       <div class="alert alert-info" role="alert">
           At this time, the sign-off tool does not automatically set the status of the community bug report to "signed-off".
           Please make sure the bug report status gets updated!

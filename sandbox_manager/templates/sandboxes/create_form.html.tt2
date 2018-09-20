@@ -75,6 +75,12 @@
       </div>
 -->
 
+      <div class="form-group">
+        <label for="captcha">What was the world's first open source ILS?</label>
+        <input type="captcha" class="form-control" name="captcha" id="captcha" aria-describedby="captchaHelp" required>
+        <small id="captchaHelp" class="form-text text-muted">The answer is in the upper left corner of this page.</small>
+      </div>
+
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
