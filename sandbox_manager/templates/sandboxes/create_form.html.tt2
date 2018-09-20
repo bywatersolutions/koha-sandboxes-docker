@@ -81,6 +81,12 @@
         <small id="captchaHelp" class="form-text text-muted">The answer is in the upper left corner of this page.</small>
       </div>
 
+      <div class="alert alert-info" role="alert">
+          The database username will be <i>instance_koha</i> where <i>instance</i> is your instance name, with the password <i>password</i>.
+          <br/>
+          The initial staff login will be <i>koha</i>, with the password <i>koha</i>
+      </div>
+
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
