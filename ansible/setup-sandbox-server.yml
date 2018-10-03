@@ -219,3 +219,8 @@
         name: "Start sandbox daemon"
         minute: "*"
         job: "{{pwd_output.stdout}}/sandbox_manager/daemon.pl --start -d > /dev/null 2>&1"
+    - cron:
+        name: "Re-provision server nightly"
+        minute: "0"
+        hour: "0"
+        job: "{{pwd_output.stdout}}/setup-sandbox-server.sh > /dev/null 2>&1"
