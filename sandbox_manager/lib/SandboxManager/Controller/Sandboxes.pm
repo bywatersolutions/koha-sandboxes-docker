@@ -125,12 +125,13 @@ sub signoff_submit {
     my $name   = $self->param('name');
     my $user   = $self->param('user');
     my $email  = $self->param('email');
+    my $bug    = $self->param('bug');
     my $number = $self->param('number');
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
     my $output = q{};
-    $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number" } . "\n";
+    $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number $bug" } . "\n";
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
