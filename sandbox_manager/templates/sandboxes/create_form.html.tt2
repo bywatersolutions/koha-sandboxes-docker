@@ -82,9 +82,9 @@
       </div>
 
       <div class="alert alert-info" role="alert">
-          The database username will be <i>instance_koha</i> where <i>instance</i> is your instance name, with the password <i>password</i>.
-          <br/>
           The initial staff login will be <i>koha</i>, with the password <i>koha</i>
+          <br/>
+          The database user will be <i>koha_&lt;sandbox name&gt;</i>, with the password <i>password</i>
       </div>
 
       <button type="submit" class="btn btn-primary">Submit</button>

@@ -230,6 +230,7 @@ sub clear_database {
     $output .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" } . "\n";
     $output .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
     $output .= qx{ docker restart memcached } . "\n";
+    $output .= qq{ Koha should now show the web installer. The username will be 'koha_$name' with the password 'password' } . "\n";
 
     $self->render(
         title  => "Full Zebra Reindex",
