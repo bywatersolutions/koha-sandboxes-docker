@@ -163,6 +163,10 @@ sub apply_bug_submit {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
+    my $sandbox = LoadFile("$config_dir/$name.yml");
+    $sandbox->{BUG_NUMBER} = $bug;
+    DumpFile( "$config_dir/$name.yml", $sandbox );
+
     my $output = q{};
     $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && yes | git bz apply $bug" } . "\n";
 
