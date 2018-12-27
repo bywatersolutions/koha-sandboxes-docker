@@ -13,6 +13,8 @@
             <th>Staff</th>
             <th>OPAC</th>
             <th>Created</th>
+            <th>Expiration</th>
+            <th>Renewals</th>
             <th>Actions</th>
             <th>&nbsp;</th>
         </tr>
@@ -65,6 +67,14 @@
                     [% END %]
                 </td>
                 <td>[% s.CREATED_ON %]</td>
+                <td>[% s.EXPIRATION %]</td>
+                <td>
+                    [% IF s.EXPIRATION && user_vars.SB_MAX_RENEWALS %]
+                        [% user_vars.SB_MAX_RENEWALS - s.RENEWALS %] / [% user_vars.SB_MAX_RENEWALS %]
+                    [% ELSE %]
+                        &nbsp;
+                    [% END %]
+                </td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
                         <div class="btn-group" role="group">
@@ -80,6 +90,10 @@
                                 <a class="dropdown-item" target="_blank" href="/apply_bug/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Apply patches</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" target="_blank" href="/signoff/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Sign-off patches</a>
+                                [% IF s.EXPIRATION && user_vars.SB_MAX_RENEWALS && s.RENEWALS < user_vars.SB_MAX_RENEWALS %]
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/renew/[% s.KOHA_INSTANCE %]"><i class="fas fa-history"></i> Renew sandbox</a>
+                                [% END %]
                             </div>
                         </div>
                     [% END %]

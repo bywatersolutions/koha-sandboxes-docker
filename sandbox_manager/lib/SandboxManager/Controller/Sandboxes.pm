@@ -79,6 +79,10 @@ sub create_submit {
 
     }
     else {
+        my $lifetime_hours = $user_vars->{SB_LIFETIME_HOURS};
+        my $expiration = $lifetime_hours ? DateTime->now()->add( hours => $lifetime_hours )->datetime(q{ }) : undef;
+        my $created_on = DateTime->now()->datetime(q{ });
+
         DumpFile(
             "$config_dir/$name.yml",
             {
@@ -92,11 +96,36 @@ sub create_submit {
                 NOTES          => $notes,
                 DESCRIPTION    => $description,
                 PASSWORD       => $password,
-                CREATED_ON     => DateTime->now()->datetime(q{ }),
+                CREATED_ON     => $created_on,
+                EXPIRATION     => $expiration,
+		RENEWALS       => 0,
             }
         );
         $self->redirect_to('/');
     }
+}
+
+sub renew {
+    my $self = shift;
+
+    my $name = $self->param('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $sandbox = LoadFile("$config_dir/$name.yml");
+
+    my $max_renewals = $user_vars->{SB_MAX_RENEWALS};
+    my $renewals = $sandbox->{RENEWALS};
+
+    if ( $max_renewals && $renewals < $max_renewals ) {
+        my $lifetime_hours = $user_vars->{SB_LIFETIME_HOURS};
+        my $expiration = DateTime->now()->add( hours => $lifetime_hours )->datetime(q{ });
+	$sandbox->{RENEWALS}++;
+        $sandbox->{EXPIRATION} = $expiration;
+        DumpFile( "$config_dir/$name.yml", $sandbox );
+    }
+
+    $self->redirect_to('/');
 }
 
 sub signoff_form {

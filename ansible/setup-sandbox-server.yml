@@ -73,6 +73,8 @@
         name: Proc::Daemon
     - cpanm:
         name: Modern::Perl
+    - cpanm:
+        name: DateTime::Format::Strptime;
 
     - name: Install "apache2" package
       apt:

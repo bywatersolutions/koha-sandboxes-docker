@@ -4,3 +4,5 @@ sandbox_host_domain: sandboxes.example.com
 GIT_BZ_USER: "me@example.com"
 GIT_BZ_PASSWORD: "letmeinplz,ty" # Spaces in password break everything, fyi
 MAX_SANDBOXES: 10
+SB_LIFETIME_HOURS: 24
+SB_MAX_RENEWALS: 2

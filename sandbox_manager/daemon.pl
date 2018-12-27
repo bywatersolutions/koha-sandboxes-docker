@@ -11,6 +11,7 @@ use FindBin qw($Bin);
 use Getopt::Long;
 use Proc::Daemon;
 use YAML qw( LoadFile DumpFile );
+use DateTime::Format::Strptime;
 
 my $config_dir = q{/sandboxes/configs};
 my $logs_dir   = q{/sandboxes/logs};
@@ -107,6 +108,16 @@ sub start {
 		    unlink "$logs_dir/$sandbox_name.log";
 		    unlink "$config_dir/$sandbox_name.yml";
 		    say "DELETION OF $sandbox_name COMPLETE";
+		} elsif ( $sandbox->{EXPIRATION} ) {
+                    my $format = DateTime::Format::Strptime->new( pattern => '%F %T');
+		    my $dt = $format->parse_datetime( $sandbox->{EXPIRATION} );
+		    if ( $dt < DateTime->now() ) {
+                        say "AUTO-DELETING $sandbox_name";
+                        qx{ $script_dir/destroy-sandbox-instance.sh -f $config_dir/$file };
+                        unlink "$logs_dir/$sandbox_name.log";
+		        unlink "$config_dir/$sandbox_name.yml";
+		        say "DELETION OF $sandbox_name COMPLETE";
+		    }
 		}
 
             }
