@@ -30,5 +30,5 @@ Starting with a Debian 9 system:
 ## Future Goals
 * Add ability to run specific unit tests from web
 * Add ability to select a pre-generated database list ( also we need to generate those databases )
-* Allow ssh to koha containers, either through web or cli
+* ~Allow ssh to koha containers, either through web or cli~
 * Dockerize such that sandbox host needs only Docker. Ansible, the web app, and the daemon will run from a container and steer the host Docker daemon via Ansible.
