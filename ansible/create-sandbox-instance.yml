@@ -96,6 +96,7 @@
         published_ports:
           - 8080
           - 8081
+          - 22
         env:
             DB_HOSTNAME: "{{ DB_HOSTNAME }}"
             EDITOR: "{{ EDITOR }}"
@@ -137,6 +138,11 @@
       register: docker_port_opac
     - debug:
         msg: "Using '{{ docker_port_opac.stdout }}' as opac port"
+    - name: "Get host port for sandbox ssh port"
+      shell: docker port koha-{{ KOHA_INSTANCE }} | grep 8080 | rev | cut -d":" -f1 | rev
+      register: docker_port_ssh
+    - debug:
+        msg: "Using '{{ docker_port_ssh.stdout }}' as ssh port"
 
     - name: "Install apache config for sandbox instance"
       template:
@@ -171,6 +177,26 @@
       notify:
         - "Restart plack in docker container"
         - "Run updatedatabase.pl in docker container"
+
+    - name: "Install OpenSSH Server"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      apt:
+        name: openssh-server
+        update_cache: yes
+        state: present
+      ignore_errors: yes
+    - name: "Enable PermitRootLogin for sshd"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config"
+    - name: "Start sshd"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "/etc/init.d/ssh start"
+      # Service module fails to start ssh and I don't know why
+    - name: Set root password to 'koha'
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      user:
+        name: root
+        password: "{{ 'koha' | password_hash('sha512') }}"
 
     - name: "Pause for koha container to set itself up, before applying git remote {{ GIT_REMOTE }} and branch {{ GIT_BRANCH }}"
       pause:
