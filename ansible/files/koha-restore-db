@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use feature 'say';
+
+use File::Basename;
+
+my $db_path = $ENV{'DB_FILE'};
+my $instance = $ENV{'INSTANCE'};
+
+my $db_file = basename( $db_path );
+
+unless ( $db_file ) {
+    say "Environment variable DB_FILE not set!";
+    exit 1;
+}
+
+unless ( $instance ) {
+    say "Environment variable INSTANCE not set!";
+    exit 1;
+}
+
+my $output;
+
+say "DB FILE PATH: $db_path";
+say "FILENAME:     $db_file";
+say "INSTANCE:    $instance";
+say q{};
+
+say "Copying $db_file $instance...";
+$output = qx{docker cp $db_path koha-$instance:/$db_file};
+say $output . $/;
+
+say "Deleteing existing database...";
+$output = qx{docker exec -i koha-$instance bash -c "echo 'DROP DATABASE koha_$instance; CREATE DATABASE koha_$instance;' | sudo koha-mysql $instance"};
+say $output . $/;
+
+say "Restoring database from file";
+$output = qx{docker exec koha-$instance bash -c "zcat /$db_file | egrep -v '^(CREATE DATABASE|USE|INSERT INTO \\`action_logs|INSERT INTO \\`import_records|INSERT INTO \\`statistics|INSERT INTO \\`deletedbiblio|INSERT INTO \\`deleteditems)' - | sudo koha-mysql $instance"};
+say $output . $/;

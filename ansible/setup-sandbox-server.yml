@@ -213,6 +213,16 @@
         networks:
           - name: kohanet
 
+    - name: Install koha-restore-db script
+      copy:
+        dest: /usr/local/bin/koha-restore-db
+        mode: 555
+        owner: root
+        src: files/koha-restore-db
+        update: yes
+      notify:
+        - "Update koha git repo"
+
     - cron:
         name: "Start sandbox manager"
         minute: "*"
