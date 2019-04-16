@@ -207,6 +207,21 @@ sub apply_bug_submit {
     );
 }
 
+sub rebuild_dbic {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec koha-$name /bin/bash -c "/kohadevbox/bin/dbic" } . "\n";
+
+    $self->render(
+        title  => "Full DBIC Schema Rebuild",
+        text   => $output,
+        format => 'txt'
+    );
+}
+
 sub delete {
     my $self = shift;
     my $name = $self->stash('name');
