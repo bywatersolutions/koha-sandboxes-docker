@@ -10,7 +10,8 @@ sub startup {
     my $config = $self->plugin('Config');
 
     # Documentation browser under "/perldoc"
-    $self->plugin('PODRenderer') if $config->{perldoc};
+    #$self->plugin('PODRenderer') if $config->{perldoc};
+    #PODRenderer is DEPRECATED
 
     $self->plugin('TemplateToolkit');
     $self->plugin( TemplateToolkit => { template => { INTERPOLATE => 1 } } );
