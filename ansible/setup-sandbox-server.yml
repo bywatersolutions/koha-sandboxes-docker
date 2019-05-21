@@ -24,7 +24,7 @@
         - "Update koha git repo"
     -
       name: "Update koha git repo"
-      command: cd /usr/local/src/koha && yes | git fetch --all
+      command: cd /usr/local/src/koha; yes | git fetch --all
 
   vars_files:
       - vars/defaults.yml
