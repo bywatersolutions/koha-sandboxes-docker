@@ -119,10 +119,10 @@
             KOHA_PROVE_CPUS: "{{ KOHA_PROVE_CPUS }}"
             KOHA_USER: "{{ KOHA_USER }}"
             PERL5LIB: "{{ PERL5LIB }}"
-            REMOTE_DEBUGGER_DIR: "{{ REMOTE_DEBUGGER_DIR }}"
-            REMOTE_DEBUGGER_KEY: "{{ REMOTE_DEBUGGER_KEY }}"
-            REMOTE_DEBUGGER_LOCATION: "{{ REMOTE_DEBUGGER_LOCATION }}"
-            REMOTE_DEBUGGER_PACKAGE: "{{ REMOTE_DEBUGGER_PACKAGE }}"
+            #REMOTE_DEBUGGER_DIR: "{{ REMOTE_DEBUGGER_DIR }}"
+            #REMOTE_DEBUGGER_KEY: "{{ REMOTE_DEBUGGER_KEY }}"
+            #REMOTE_DEBUGGER_LOCATION: "{{ REMOTE_DEBUGGER_LOCATION }}"
+            #REMOTE_DEBUGGER_PACKAGE: "{{ REMOTE_DEBUGGER_PACKAGE }}"
             RUN_TESTS_AND_EXIT: "{{ RUN_TESTS_AND_EXIT }}"
         volumes:
           - /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}:/kohadevbox/koha
