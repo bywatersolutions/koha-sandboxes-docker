@@ -219,7 +219,7 @@
         mode: 555
         owner: root
         src: files/koha-restore-db
-        update: yes
+        force: yes
       notify:
         - "Update koha git repo"
 
