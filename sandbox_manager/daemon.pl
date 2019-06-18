@@ -19,7 +19,7 @@ my $script_dir = "$Bin/..";
 
 chdir($script_dir);
 
-my $pf = catfile( getcwd(), 'pidfile.pid' );
+my $pf     = catfile( getcwd(), 'pidfile.pid' );
 my $daemon = Proc::Daemon->new(
     pid_file => $pf,
     work_dir => getcwd()
@@ -69,14 +69,15 @@ sub status {
 
 sub start {
     if ( !$pid ) {
-	if ( $daemonize ) {
-	    say "Starting as daemon...";
+        if ($daemonize) {
+            say "Starting as daemon...";
             $daemon->Init;
-	} else {
+        }
+        else {
             say "Starting...";
-	}
+        }
 
-	my $user_vars = LoadFile("$Bin/../ansible/vars/user.yml");
+        my $user_vars = LoadFile("$Bin/../ansible/vars/user.yml");
 
         while (1) {
             opendir( DIR, $config_dir );
@@ -84,41 +85,45 @@ sub start {
                 next unless ( -f "$config_dir/$file" );
                 next unless ( $file =~ m/\.yml$/ );
 
-                my $sandbox = LoadFile("$config_dir/$file");
+                my $sandbox      = LoadFile("$config_dir/$file");
                 my $sandbox_name = $sandbox->{KOHA_INSTANCE};
 
                 if ( !$sandbox->{PROVISIONED_ON} ) {
-                    $sandbox->{PROVISIONED_ON} = DateTime->now()->datetime(q{ });
+                    $sandbox->{PROVISIONED_ON} =
+                      DateTime->now()->datetime(q{ });
                     if ( DumpFile( "$config_dir/$file", $sandbox ) ) {
-			say "PROVISIONING $sandbox_name";
+                        say "PROVISIONING $sandbox_name";
 
                         my $output = qx{ $script_dir/create-sandbox-instance.sh -f $config_dir/$file 2>&1 1>$logs_dir/$sandbox_name.log };
 
-			say "LOGFILE: $logs_dir/$sandbox_name.log";
+                        say "LOGFILE: $logs_dir/$sandbox_name.log";
 
-			$sandbox->{PROVISION_COMPLETE} = 1;
-			DumpFile( "$config_dir/$file", $sandbox );
+                        $sandbox->{PROVISION_COMPLETE} = 1;
+                        DumpFile( "$config_dir/$file", $sandbox );
                     }
                     else {
                         say "Unable to write to $config_dir/$file!";
                     }
-                } elsif ( $sandbox->{DELETE} ) {
-	            say "DELETING $sandbox_name";
+                }
+                elsif ( $sandbox->{DELETE} ) {
+                    say "DELETING $sandbox_name";
                     qx{ $script_dir/destroy-sandbox-instance.sh -f $config_dir/$file };
-		    unlink "$logs_dir/$sandbox_name.log";
-		    unlink "$config_dir/$sandbox_name.yml";
-		    say "DELETION OF $sandbox_name COMPLETE";
-		} elsif ( $sandbox->{EXPIRATION} ) {
-                    my $format = DateTime::Format::Strptime->new( pattern => '%F %T');
-		    my $dt = $format->parse_datetime( $sandbox->{EXPIRATION} );
-		    if ( $dt < DateTime->now() ) {
+                    unlink "$logs_dir/$sandbox_name.log";
+                    unlink "$config_dir/$sandbox_name.yml";
+                    say "DELETION OF $sandbox_name COMPLETE";
+                }
+                elsif ( $sandbox->{EXPIRATION} ) {
+                    my $format =
+                      DateTime::Format::Strptime->new( pattern => '%F %T' );
+                    my $dt = $format->parse_datetime( $sandbox->{EXPIRATION} );
+                    if ( $dt < DateTime->now() ) {
                         say "AUTO-DELETING $sandbox_name";
                         qx{ $script_dir/destroy-sandbox-instance.sh -f $config_dir/$file };
                         unlink "$logs_dir/$sandbox_name.log";
-		        unlink "$config_dir/$sandbox_name.yml";
-		        say "DELETION OF $sandbox_name COMPLETE";
-		    }
-		}
+                        unlink "$config_dir/$sandbox_name.yml";
+                        say "DELETION OF $sandbox_name COMPLETE";
+                    }
+                }
 
             }
             sleep(1);
