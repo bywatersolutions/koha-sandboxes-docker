@@ -198,6 +198,7 @@ sub apply_bug_submit {
 
     my $output = q{};
     $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && yes | git bz apply $bug" } . "\n";
+    $output .= qx{ docker exec koha-$name /bin/bash -c "perl koha/installer/data/mysql/updatedatabase.pl" } . "\n";
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
