@@ -165,6 +165,11 @@
       docker_network:
           name: kohanet
 
+    - name: Ensure the MySQL database volume has been created
+      docker_volume:
+        name: db-data
+        state: present
+
     - name: Ensure MySQL database Docker container is running
       docker_container:
         name: db
@@ -178,6 +183,8 @@
             MYSQL_ROOT_PASSWORD: password
             MYSQL_USER: koha
             MYSQL_PASSWORD: password
+        volumes:
+          - 'db-data:/var/lib/mysql'
         published_ports: 3306:3306
         networks:
           - name: kohanet
