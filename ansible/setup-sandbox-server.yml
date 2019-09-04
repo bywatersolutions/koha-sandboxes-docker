@@ -186,6 +186,7 @@
         volumes:
           - 'db-data:/var/lib/mysql'
         published_ports: 3306:3306
+        command: '--max_allowed_packet=32505856'
         networks:
           - name: kohanet
 
