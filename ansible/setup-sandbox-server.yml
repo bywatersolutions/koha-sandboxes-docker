@@ -243,4 +243,4 @@
         name: "Re-provision server nightly"
         minute: "0"
         hour: "0"
-        job: "{{pwd_output.stdout}}/setup-sandbox-server.sh > /dev/null 2>&1"
+        job: "cd {{pwd_output.stdout}} && {{pwd_output.stdout}}/setup-sandbox-server.sh > /dev/null 2>&1"
