@@ -39,8 +39,8 @@ GetOptions(
     "stop"     => \$stop
 );
 
-unless ( $start || $status || $stap ) {
-    say "daemon.pl [--start [-d|--daemon]] [--stop] [--status]"
+unless ( $start || $status || $stop ) {
+    say "daemon.pl [--start [-d|--daemon]] [--stop] [--status]";
     exit;
 }
 
