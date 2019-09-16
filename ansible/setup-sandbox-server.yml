@@ -231,6 +231,14 @@
       notify:
         - "Update koha git repo"
 
+    - name: Symlink db loader script to /usr/local/bin
+      copy:
+        src: files/sb-load-db
+        dest: /usr/local/bin/sb-load-db
+        state: link
+        mode: 755
+        owner: root
+
     - cron:
         name: "Start sandbox manager"
         minute: "*"
