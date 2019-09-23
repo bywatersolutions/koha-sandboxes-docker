@@ -170,19 +170,19 @@
         name: db-data
         state: present
 
-    - name: Ensure MariaDB database Docker container is running
+    - name: Ensure MySQL database Docker container is running
       docker_container:
         name: db
         state: present
-        image: mariadb/server:10.1
+        image: mysql:5.5
         pull: yes
         restart: yes
         restart_policy: always
         state: started
         env:
-            MARIADB_ROOT_PASSWORD: password
-            MARIADB_USER: koha
-            MARIADB_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_USER: koha
+            MYSQL_PASSWORD: password
         volumes:
           - 'db-data:/var/lib/mysql'
         published_ports: 3306:3306
