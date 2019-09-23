@@ -170,11 +170,19 @@
         name: db-data
         state: present
 
+    - name: Copy mariadb init directory
+      copy:
+        dest: /
+        mode: 755
+        owner: root
+        src: files/docker-entrypoint-initdb.d
+        force: yes
+
     - name: Ensure MySQL database Docker container is running
       docker_container:
         name: db
         state: present
-        image: mysql:5.5
+        image: mariadb/server:10.1
         pull: yes
         restart: yes
         restart_policy: always
@@ -185,6 +193,7 @@
             MYSQL_PASSWORD: password
         volumes:
           - 'db-data:/var/lib/mysql'
+          - '/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'
         published_ports: 3306:3306
         command: '--max_allowed_packet=32505856'
         networks:
