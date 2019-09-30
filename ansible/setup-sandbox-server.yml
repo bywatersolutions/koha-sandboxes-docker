@@ -170,12 +170,20 @@
         name: db-data
         state: present
 
-    - name: Copy mariadb init directory
+    - name: Copy mariadb init directory to a known path
       copy:
         dest: /
         mode: 755
         owner: root
         src: files/docker-entrypoint-initdb.d
+        force: yes
+
+    - name: Copy mariadb conf.d file to a known path
+      copy:
+        dest: /sandboxes.cnf
+        mode: 444
+        owner: root
+        src: files/sandboxes.cnf
         force: yes
 
     - name: Ensure MySQL database Docker container is running
@@ -194,8 +202,9 @@
         volumes:
           - 'db-data:/var/lib/mysql'
           - '/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'
+          - '/sandboxes.cnf:/etc/mysql/conf.d/sandboxes.cnf'
         published_ports: 3306:3306
-        command: '--max_allowed_packet=32505856'
+        command: '--max_allowed_packet=501M'
         networks:
           - name: kohanet
 
