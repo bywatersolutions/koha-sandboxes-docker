@@ -17,10 +17,13 @@
         - "Update koha git repo"
 
     - name: "Update koha git repo"
-      shell: "cd /usr/local/src/koha && yes | git fetch --all"
+      shell: "cd /usr/local/src/koha && yes | git fetch --all && git pull"
+
+    - name: "Update koha-testing-docker git rep"
+      shell: "cd /usr/local/src/koha-testing-docker && yes | git fetch --all && git pull"
 
     - name: "Update koha git repo for sandbox"
-      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all"
+      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all && git pull"
 
     - name: "Restart plack in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
