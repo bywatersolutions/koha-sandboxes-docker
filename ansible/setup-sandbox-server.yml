@@ -55,9 +55,9 @@
       apt:
         name: default-libmysqlclient-dev
 
-    - name: Install "mariadb-client" package to allow cli access to db container
+    - name: Install "mysql-client" package to allow cli access to db container
       apt:
-        name: mariadb-client
+        name: mysql-client
 
     - cpanm:
         name: Module::Install
@@ -170,7 +170,7 @@
         name: db-data
         state: present
 
-    - name: Copy mariadb init directory to a known path
+    - name: Copy mysql init directory to a known path
       copy:
         dest: /
         mode: 755
@@ -178,7 +178,7 @@
         src: files/docker-entrypoint-initdb.d
         force: yes
 
-    - name: Copy mariadb conf.d file to a known path
+    - name: Copy mysql conf.d file to a known path
       copy:
         dest: /sandboxes.cnf
         mode: 444
@@ -190,7 +190,7 @@
       docker_container:
         name: db
         state: present
-        image: mariadb/server:10.1
+        image: mysql:5.6
         pull: yes
         restart: yes
         restart_policy: always
