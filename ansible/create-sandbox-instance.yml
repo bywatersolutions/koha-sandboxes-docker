@@ -62,18 +62,18 @@
         login_host: 127.0.0.1
         login_port: 3306
         login_user: root
-        login_password: password
+        login_password: "{{ DB_ROOT_PASSWORD }}"
 
     - mysql_user:
         name: "koha_{{ KOHA_INSTANCE }}"
-        password: password
+        password: "{{ KOHA_DB_PASSWORD }}"
         priv: 'koha_{{ KOHA_INSTANCE }}.*:ALL'
         host: '%'
         state: present
         login_host: 127.0.0.1
         login_port: 3306
         login_user: root
-        login_password: password
+        login_password: "{{ DB_ROOT_PASSWORD }}"
 
     - name: "Install koha git config for sandbox"
       copy:
