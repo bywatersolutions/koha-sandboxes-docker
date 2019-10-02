@@ -68,7 +68,7 @@
         name: "koha_{{ KOHA_INSTANCE }}"
         password: "{{ KOHA_DB_PASSWORD }}"
         priv: 'koha_{{ KOHA_INSTANCE }}.*:ALL'
-        host: '172.17.%.%'
+        host: '172.%.%.%'
         state: present
         login_host: 127.0.0.1
         login_port: 3306

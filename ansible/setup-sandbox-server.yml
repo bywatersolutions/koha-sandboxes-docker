@@ -197,6 +197,7 @@
         state: started
         env:
             MYSQL_ROOT_PASSWORD: "{{ DB_ROOT_PASSWORD }}"
+            MYSQL_ROOT_HOST: "172.%.%.%"
         volumes:
           - 'db-data:/var/lib/mysql'
           - '/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'
