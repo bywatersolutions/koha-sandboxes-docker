@@ -3,7 +3,7 @@
 <div class="container">
     <h2>Apply patch to sandbox</h2>
 
-    <form id="create-sandbox" method="post" action="[% c.url_for('/apply_bug') %]/[% sandbox.KOHA_INSTANCE %]">
+    <form id="create-sandbox" method="post" action="[% c.url_for('/apply_bug') | html %]/[% sandbox.KOHA_INSTANCE | html %]">
       <div class="form-group">
         <label for="bug">Bug number</label>
         <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="" required />

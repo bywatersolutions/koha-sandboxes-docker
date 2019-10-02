@@ -25,45 +25,45 @@
     <form id="create-sandbox" method="post" action="[% c.url_for('/create') %]">
       <div class="form-group">
         <label for="name">Your name</label>
-        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% params.user %]" required>
+        <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% params.user | html %]" required>
         <small id="nameHelp" class="form-text text-muted">Enter your name ( or alias, nick or whatever ). This will be used for signing off on patches.</small>
       </div>
 
       <div class="form-group">
         <label for="email">Your email</label>
-        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter your email address" value="[% params.email %]" required>
+        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter your email address" value="[% params.email | html %]" required>
         <small id="emailHelp" class="form-text text-muted">Enter your email address. This will be used for signing off on patches.</small>
       </div>
 
       <div class="form-group">
         <label for="name">Sandbox name</label>
-        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[a-z][a-z0-9]+" maxlength="11" value="[% params.name %]" required>
+        <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter sandbox name" pattern="[a-z][a-z0-9]+" maxlength="11" value="[% params.name | html %]" required>
         <small id="nameHelp" class="form-text text-muted">Enter a simple name for your sandbox, lower case all letters and numbers.</small>
       </div>
 
       <div class="form-group">
         <label for="bug">Bug number</label>
-        <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="[% params.bug %]">
+        <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="[% params.bug | html %]">
         <small id="bugHelp" class="form-text text-muted">Enter a bug number here and it will be applied to your sandbox.</small>
       </div>
 
       <div class="form-group">
         <label for="git_remote">Git remote & branch</label>
-        <input type="text" class="form-control" name="git_remote" id="git_remote" aria-describedby="git_remoteHelp" placeholder="Enter repository url" value="[% params.git_remote %]">
+        <input type="text" class="form-control" name="git_remote" id="git_remote" aria-describedby="git_remoteHelp" placeholder="Enter repository url" value="[% params.git_remote | html %]">
         <br/>
-        <input type="text" class="form-control" name="git_branch" id="git_branch" aria-describedby="git_branchHelp" placeholder="Enter name of branch" value="[% params.git_branch %]">
+        <input type="text" class="form-control" name="git_branch" id="git_branch" aria-describedby="git_branchHelp" placeholder="Enter name of branch" value="[% params.git_branch | html %]">
         <small id="git_remoteHelp" class="form-text text-muted">Enter a Koha git remote address and branch here and it will be applied to your sandbox.</small>
       </div>
 
       <div class="form-group">
         <label for="name">Description</label>
-        <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter description" value="[% input.description %]">
+        <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter description" value="[% input.description | html %]">
         <small id="descriptionHelp" class="form-text text-muted">Enter a basic description, optional.</small>
       </div>
 
       <div class="form-group">
         <label for="notes">Notes</label>
-        <input type="text" class="form-control" name="notes" id="notes" aria-describedby="notesHelp" placeholder="Enter notes" value="[% input.notes %]">
+        <input type="text" class="form-control" name="notes" id="notes" aria-describedby="notesHelp" placeholder="Enter notes" value="[% input.notes | html %]">
         <small id="notesHelp" class="form-text text-muted">Add notes, optional.</small>
       </div>
 
