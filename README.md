@@ -32,3 +32,13 @@ Starting with a Debian 9 system:
 * Add ability to select a pre-generated database list ( also we need to generate those databases )
 * ~Allow ssh to koha containers, either through web or cli~
 * Dockerize such that sandbox host needs only Docker. Ansible, the web app, and the daemon will run from a container and steer the host Docker daemon via Ansible.
+
+## Guide
+
+### Using a htpasswd
+
+Using a password should be set before provisioning.
+Otherwise you'll need to reprovision after following the instructions below.
+* `sudo apt-get install apache2-utils`
+* `sudo htpasswd -c /etc/apache2/.htpasswd <username>`
+* Edit ansible/vars/user.yml, set USE_HTPASSWD to true
