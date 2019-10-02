@@ -199,7 +199,7 @@
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
       user:
         name: root
-        password: "{{ 'koha' | password_hash('sha512') }}"
+        password: "{{ KOHA_SSH_PASSWORD | password_hash('sha512') }}"
 
     - name: "Pause for koha container to set itself up, before applying git remote {{ GIT_REMOTE }} and branch {{ GIT_BRANCH }}"
       pause:
