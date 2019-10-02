@@ -201,7 +201,6 @@
           - 'db-data:/var/lib/mysql'
           - '/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'
           - '/sandboxes.cnf:/etc/mysql/conf.d/sandboxes.cnf'
-        published_ports: 3306:3306
         command: '--max_allowed_packet=501M'
         networks:
           - name: kohanet
