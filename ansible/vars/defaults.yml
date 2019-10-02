@@ -2,7 +2,7 @@
 ---
 DB_HOSTNAME: "db"
 EDITOR: "vim"
-KOHA_DB_PASSWORD: "KohaPass"
+KOHA_DB_PASSWORD: "KohaRocks!"
 KOHA_DOMAIN: ".myDNSname.org"
 KOHA_INTRANET_PORT: "8081"
 KOHA_INTRANET_PREFIX: "staff-"
