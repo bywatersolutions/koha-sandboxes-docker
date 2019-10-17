@@ -1,11 +1,11 @@
 # Default configuration values
 ---
-sandbox_host_domain: sandboxes.example.com
-GIT_BZ_USER: "me@example.com"
+DB_ROOT_PASSWORD: "Hey!CanYouLetMeIn?Thanks!"
 GIT_BZ_PASSWORD: "letmeinplz,ty" # Spaces in password break everything, fyi
+GIT_BZ_USER: "me@example.com"
+KOHA_DB_PASSWORD: "KohaRocks!"
+KOHA_SSH_PASSWORD: "MayIPlzHazLetMeInz?tY!"
 MAX_SANDBOXES: 10
 SB_LIFETIME_HOURS: 24
 SB_MAX_RENEWALS: 2
-KOHA_DB_PASSWORD: "KohaRocks!"
-KOHA_SSH_PASSWORD: "MayIPlzHazLetMeInz?tY!"
-DB_ROOT_PASSWORD: "Hey!CanYouLetMeIn?Thanks!"
+sandbox_host_domain: sandboxes.example.com
