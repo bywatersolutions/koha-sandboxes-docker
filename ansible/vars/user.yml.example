@@ -6,6 +6,6 @@ GIT_BZ_USER: "me@example.com"
 KOHA_DB_PASSWORD: "KohaRocks!"
 KOHA_SSH_PASSWORD: "MayIPlzHazLetMeInz?tY!"
 MAX_SANDBOXES: 10
+SANDBOX_HOST_DOMAIN: sandboxes.example.com
 SB_LIFETIME_HOURS: 24
 SB_MAX_RENEWALS: 2
-sandbox_host_domain: sandboxes.example.com

@@ -58,12 +58,12 @@
                 <td>[% s.GIT_USER_NAME | html %]</td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
-                        <a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE | html %].[% user_vars.sandbox_host_domain | html %]"><i class="fas fa-external-link-alt"></i> Staff</a>
+                        <a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE | html %].[% user_vars.SANDBOX_HOST_DOMAIN | html %]"><i class="fas fa-external-link-alt"></i> Staff</a>
                     [% END %]
                 </td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
-                        <a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE | html %].[% user_vars.sandbox_host_domain | html %]"><i class="fas fa-external-link-alt"></i> OPAC</a>
+                        <a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE | html %].[% user_vars.SANDBOX_HOST_DOMAIN | html %]"><i class="fas fa-external-link-alt"></i> OPAC</a>
                     [% END %]
                 </td>
                 <td>[% s.CREATED_ON | html %]</td>
