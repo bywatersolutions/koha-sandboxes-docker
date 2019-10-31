@@ -4,14 +4,16 @@
     ProxyPass        / http://localhost:{{ docker_port_intranet.stdout }}/ retry=0
     ProxyPassReverse / http://localhost:{{ docker_port_intranet.stdout }}/ retry=0
 
-    {% if USE_HTPASSWD %}<Proxy *>
+    {% if USE_HTPASSWD %}
+    <Proxy *>
         Order deny,allow
         Allow from all
         Authtype Basic
         Authname "Password Required"
         AuthUserFile /etc/apache2/.htpasswd
         Require valid-user
-    </Proxy>{% endif %}
+    </Proxy>
+    {% endif %}
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -20,12 +22,14 @@
     ProxyPass        / http://localhost:{{ docker_port_opac.stdout }}/ retry=0
     ProxyPassReverse / http://localhost:{{ docker_port_opac.stdout }}/ retry=0
 
-    {% if USE_HTPASSWD %}<Proxy *>
+    {% if USE_HTPASSWD %}
+    <Proxy *>
         Order deny,allow
         Allow from all
         Authtype Basic
         Authname "Password Required"
         AuthUserFile /etc/apache2/.htpasswd
         Require valid-user
-    </Proxy>{% endif %}
+    </Proxy>
+    {% endif %}
 </VirtualHost>
