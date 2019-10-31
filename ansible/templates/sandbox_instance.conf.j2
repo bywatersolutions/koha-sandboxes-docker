@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-    ServerName staff-{{ KOHA_INSTANCE }}.{{ sandbox_host_domain }}
+    ServerName staff-{{ KOHA_INSTANCE }}.{{ SANDBOX_HOST_DOMAIN }}
 
     ProxyPass        / http://localhost:{{ docker_port_intranet.stdout }}/ retry=0
     ProxyPassReverse / http://localhost:{{ docker_port_intranet.stdout }}/ retry=0
@@ -17,7 +17,7 @@
 </VirtualHost>
 
 <VirtualHost *:80>
-    ServerName opac-{{ KOHA_INSTANCE }}.{{ sandbox_host_domain }}
+    ServerName opac-{{ KOHA_INSTANCE }}.{{ SANDBOX_HOST_DOMAIN }}
 
     ProxyPass        / http://localhost:{{ docker_port_opac.stdout }}/ retry=0
     ProxyPassReverse / http://localhost:{{ docker_port_opac.stdout }}/ retry=0

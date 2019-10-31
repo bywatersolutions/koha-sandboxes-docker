@@ -15,7 +15,7 @@ Starting with a Debian 9 system:
 * Copy ansible/vars/user.yml.example to ansible/vars/user.yml
 * Update ansible/vars/user.yml for your domain and account
 * Run ./setup-sandbox-server.sh
-* Browse to the domain you entered as sandbox_host_domain in your user.yml
+* Browse to the domain you entered as SANDBOX_HOST_DOMAIN in your user.yml
 
 ## Features
 * Create and destroy Koha instances dyanmically

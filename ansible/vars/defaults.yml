@@ -1,9 +1,11 @@
 # Default configuration values
 ---
 DB_HOSTNAME: "db"
+DB_ROOT_PASSWORD: "Hey!CanYouLetMeIn?Thanks!"
 EDITOR: "vim"
+GIT_BZ_PASSWORD: "letmeinplz,ty" # Spaces in password break everything, fyi
+GIT_BZ_USER: "me@example.com"
 KOHA_DB_PASSWORD: "KohaRocks!"
-KOHA_SSH_PASSWORD: "MayIPlzHazLetMeInz?tY!"
 KOHA_DOMAIN: ".myDNSname.org"
 KOHA_INTRANET_PORT: "8081"
 KOHA_INTRANET_PREFIX: "staff-"
@@ -14,12 +16,16 @@ KOHA_OPAC_PREFIX: ""
 KOHA_OPAC_SUFFIX: ""
 KOHA_PASS: "koha"
 KOHA_PROVE_CPUS: ""
+KOHA_SSH_PASSWORD: "MayIPlzHazLetMeInz?tY!"
 KOHA_USER: "koha"
+MAX_SANDBOXES: 10
 PERL5LIB: "/kohadevbox/koha:/kohadevbox/qa-test-tools"
 REMOTE_DEBUGGER_DIR: ""
 REMOTE_DEBUGGER_KEY: ""
 REMOTE_DEBUGGER_LOCATION: ""
 REMOTE_DEBUGGER_PACKAGE: ""
 RUN_TESTS_AND_EXIT: "no"
-DB_ROOT_PASSWORD: "Hey!CanYouLetMeIn?Thanks!"
+SANDBOX_HOST_DOMAIN: sandboxes.example.com
+SB_LIFETIME_HOURS: 24
+SB_MAX_RENEWALS: 2
 USE_HTPASSWD: false

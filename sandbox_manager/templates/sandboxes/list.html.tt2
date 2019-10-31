@@ -23,7 +23,7 @@
     <tbody>
         [% FOREACH s IN sandboxes %]
             <tr>
-                <td>[% s.KOHA_INSTANCE %]</td>
+                <td>[% s.KOHA_INSTANCE | html %]</td>
                 <td>
                     [% IF s.DELETE %]
                         Deletion pending
@@ -41,36 +41,36 @@
                             <i class="fas fa-file-alt"></i> Logs
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDropLogs">
-                            <a class="dropdown-item" target="_blank" href="/provision_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Provision log</a>
-                            <a class="dropdown-item" target="_blank" href="/docker_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Docker log</a>
+                            <a class="dropdown-item" target="_blank" href="/provision_log/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Provision log</a>
+                            <a class="dropdown-item" target="_blank" href="/docker_log/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Docker log</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]/plack"><i class="fas fa-file-alt"></i> Koha Plack log</a>
-                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]/intranet-error"><i class="fas fa-file-alt"></i> Koha Apache intranet error log</a>
-                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE %]/opac-error"><i class="fas fa-file-alt"></i> Koha Apache OPAC error log</a>
+                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE | html %]/plack"><i class="fas fa-file-alt"></i> Koha Plack log</a>
+                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE | html %]/intranet-error"><i class="fas fa-file-alt"></i> Koha Apache intranet error log</a>
+                            <a class="dropdown-item" target="_blank" href="/koha_log/[% s.KOHA_INSTANCE | html %]/opac-error"><i class="fas fa-file-alt"></i> Koha Apache OPAC error log</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" target="_blank" href="/git_log/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Koha Git log</a>
+                            <a class="dropdown-item" target="_blank" href="/git_log/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Koha Git log</a>
                         </div>
                     </div>
                 </td>
-                <td>[% s.DESCRIPTION %]</td>
-                <td>[% s.NOTES %]</td>
-                <td>[% s.BUG_NUMBER %]</td>
-                <td>[% s.GIT_USER_NAME %]</td>
+                <td>[% s.DESCRIPTION | html %]</td>
+                <td>[% s.NOTES | html %]</td>
+                <td>[% s.BUG_NUMBER | html %]</td>
+                <td>[% s.GIT_USER_NAME | html %]</td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
-                        <a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> Staff</a>
+                        <a class="btn btn-primary" target="_blank" href="http://staff-[% s.KOHA_INSTANCE | html %].[% user_vars.SANDBOX_HOST_DOMAIN | html %]"><i class="fas fa-external-link-alt"></i> Staff</a>
                     [% END %]
                 </td>
                 <td>
                     [% IF s.PROVISION_COMPLETE %]
-                        <a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE %].[% user_vars.sandbox_host_domain %]"><i class="fas fa-external-link-alt"></i> OPAC</a>
+                        <a class="btn btn-primary" target="_blank" href="http://opac-[% s.KOHA_INSTANCE | html %].[% user_vars.SANDBOX_HOST_DOMAIN | html %]"><i class="fas fa-external-link-alt"></i> OPAC</a>
                     [% END %]
                 </td>
-                <td>[% s.CREATED_ON %]</td>
-                <td>[% s.EXPIRATION %]</td>
+                <td>[% s.CREATED_ON | html %]</td>
+                <td>[% s.EXPIRATION | html %]</td>
                 <td>
                     [% IF s.EXPIRATION && user_vars.SB_MAX_RENEWALS %]
-                        [% user_vars.SB_MAX_RENEWALS - s.RENEWALS %] / [% user_vars.SB_MAX_RENEWALS %]
+                        [% user_vars.SB_MAX_RENEWALS - s.RENEWALS | html %] / [% user_vars.SB_MAX_RENEWALS | html %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]
@@ -82,17 +82,17 @@
                                 <i class="fas fa-exchange-alt"></i> Actions
                             </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDropActions">
-                                <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE %]"><i class="fas fa-sync"></i> Restart services</a>
-                                <a class="dropdown-item" target="_blank" href="/reindex_full/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-alt"></i> Full Zebra Reindex</a>
+                                <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-sync"></i> Restart services</a>
+                                <a class="dropdown-item" target="_blank" href="/reindex_full/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Full Zebra Reindex</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" target="_blank" href="/clear_database/[% s.KOHA_INSTANCE %]"><i class="fas fa-database"></i> Clear database</a>
+                                <a class="dropdown-item" target="_blank" href="/clear_database/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-database"></i> Clear database</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" target="_blank" href="/apply_bug/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Apply patches</a>
+                                <a class="dropdown-item" target="_blank" href="/apply_bug/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-signature"></i> Apply patches</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" target="_blank" href="/signoff/[% s.KOHA_INSTANCE %]"><i class="fas fa-file-signature"></i> Sign-off patches</a>
+                                <a class="dropdown-item" target="_blank" href="/signoff/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-signature"></i> Sign-off patches</a>
                                 [% IF s.EXPIRATION && user_vars.SB_MAX_RENEWALS && s.RENEWALS < user_vars.SB_MAX_RENEWALS %]
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/renew/[% s.KOHA_INSTANCE %]"><i class="fas fa-history"></i> Renew sandbox</a>
+                                    <a class="dropdown-item" href="/renew/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-history"></i> Renew sandbox</a>
                                 [% END %]
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                 </td>
                 <td>
                     [% UNLESS s.DELETE %]
-                        <a class="btn btn-danger" href="/delete/[% s.KOHA_INSTANCE %]"><i class="fas fa-trash"></i> Delete</a>
+                        <a class="btn btn-danger" href="/delete/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-trash"></i> Delete</a>
                     [% END %]
                 </td>
             </tr>
