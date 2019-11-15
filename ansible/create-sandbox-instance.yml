@@ -22,12 +22,8 @@
     - name: "Update koha-testing-docker git rep"
       shell: "cd /usr/local/src/koha-testing-docker && yes | git fetch --all && git pull"
 
-    - name: "Update koha git repo for sandbox - Delete the master branch"
-      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && git branch -D master"
-      ignore_errors: yes
-
     - name: "Update koha git repo for sandbox"
-      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all && git checkout origin/master -b master"
+      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all; git branch -D master; git checkout origin/master -b master"
 
     - name: "Restart plack in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
