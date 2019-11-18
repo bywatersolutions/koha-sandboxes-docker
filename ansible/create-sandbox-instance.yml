@@ -23,7 +23,7 @@
       shell: "cd /usr/local/src/koha-testing-docker && yes | git fetch --all && git pull"
 
     - name: "Update koha git repo for sandbox"
-      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all && git checkout origin/master"
+      shell: "cd /usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }} && yes | git fetch --all"
 
     - name: "Restart plack in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
@@ -178,6 +178,15 @@
       shell: "cd /kohadevbox/koha && git remote add {{ KOHA_INSTANCE }} {{ GIT_REMOTE }} && git fetch {{ KOHA_INSTANCE }} && git checkout {{ KOHA_INSTANCE }}/{{ GIT_BRANCH }}"
       when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '') and not(GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
       ignore_errors: yes
+      notify:
+        - "Restart plack in docker container"
+        - "Run updatedatabase.pl in docker container"
+
+    - name: "Checkout origin/master in docker container"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "cd /kohadevbox/koha && yes | git checkout origin/master"
+      when: ((GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '')) and ((GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == ''))
+      ignore_errors: no
       notify:
         - "Restart plack in docker container"
         - "Run updatedatabase.pl in docker container"
