@@ -4,7 +4,7 @@ use Mojo::Base 'Mojolicious';
 
 # This method will run once at server start
 sub startup {
-    my $self = shift;
+     my $self = shift;
 
     # Load configuration from hash returned by "my_app.conf"
     my $config = $self->plugin('Config');
@@ -36,6 +36,8 @@ sub startup {
     $r->any('/delete/:name')->to('sandboxes#delete');
     $r->any('/restart_all/:name')->to('sandboxes#restart_all');
     $r->any('/reindex_full/:name')->to('sandboxes#reindex_full');
+    $r->any('/rebuild_dbic/:name')->to('sandboxes#rebuild_dbic');
+    $r->any('/build_css/:name')->to('sandboxes#build_css');
     $r->any('/clear_database/:name')->to('sandboxes#clear_database');
 }
 
