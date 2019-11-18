@@ -186,11 +186,11 @@
         src: files/sandboxes.cnf
         force: yes
 
-    - name: Ensure MySQL database Docker container is running
+    - name: Ensure database Docker container is running
       docker_container:
         name: db
         state: present
-        image: mysql:5.6
+        image: mariadb:10.1
         pull: yes
         restart: yes
         restart_policy: always
