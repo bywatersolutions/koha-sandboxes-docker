@@ -160,7 +160,9 @@ sub signoff_submit {
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
     my $output = q{};
+    qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash" };
     $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number $bug" } . "\n";
+    qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash pop" };
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
