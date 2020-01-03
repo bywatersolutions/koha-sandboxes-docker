@@ -160,7 +160,9 @@ sub signoff_submit {
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
     my $output = q{};
+    qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash" };
     $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number $bug" } . "\n";
+    qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash pop" };
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
@@ -202,6 +204,38 @@ sub apply_bug_submit {
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
+        text   => $output,
+        format => 'txt'
+    );
+}
+
+sub rebuild_dbic {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec koha-$name /bin/bash -c "/kohadevbox/bin/dbic" } . "\n";
+
+    $self->render(
+        title  => "Full DBIC Schema Rebuild",
+        text   => $output,
+        format => 'txt'
+    );
+}
+
+sub build_css {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec koha-$name /bin/bash -c "(cd koha; yarn install)" } . "\n";
+    $output .= qx{ docker exec koha-$name /bin/bash -c "(cd koha; yarn build)" } . "\n";
+    $output .= qx{ docker exec koha-$name /bin/bash -c "(cd koha; yarn build --view=opac)" } . "\n";
+
+    $self->render(
+        title  => "Rebuild of css from scss",
         text   => $output,
         format => 'txt'
     );

@@ -186,11 +186,11 @@
         src: files/sandboxes.cnf
         force: yes
 
-    - name: Ensure MySQL database Docker container is running
+    - name: Ensure database Docker container is running
       docker_container:
         name: db
         state: present
-        image: mysql:5.6
+        image: mariadb:10.1
         pull: yes
         restart: yes
         restart_policy: always
@@ -255,10 +255,14 @@
         mode: 755
         owner: root
 
+    - name: Start sandbox manager
+      shell: "bash -l -c 'hypnotoad {{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager'"
+
     - cron:
-        name: "Start sandbox manager"
-        minute: "*"
-        job: "{{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager daemon -m production -l http://*:3000 > /dev/null 2>&1 &"
+        name: "Start sandbox manager" #We don't need to this now, hypnotoad should handle better
+        minute: "30"
+        job: "bash -l -c 'hypnotoad {{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager'"
+        state: absent
     - cron:
         name: "Start sandbox daemon"
         minute: "*"
@@ -267,4 +271,4 @@
         name: "Re-provision server nightly"
         minute: "0"
         hour: "0"
-        job: "cd {{pwd_output.stdout}} && {{pwd_output.stdout}}/setup-sandbox-server.sh > /dev/null 2>&1"
+        job: "cd {{pwd_output.stdout}} && {{pwd_output.stdout}}/setup-sandbox-server.sh && bash -l -c 'hypnotoad {{pwd_output.stdout}}/sandbox_manager/script/sandbox_manager' > /dev/null 2>&1"

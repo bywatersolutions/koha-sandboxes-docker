@@ -30,7 +30,7 @@
         login_host: 127.0.0.1
         login_port: 3306
         login_user: root
-        login_password: password
+        login_password: "{{ DB_ROOT_PASSWORD }}"
 
     - name: Delete database user for Koha instnace
       mysql_user:
@@ -40,7 +40,7 @@
         login_host: 127.0.0.1
         login_port: 3306
         login_user: root
-        login_password: password
+        login_password: "{{ DB_ROOT_PASSWORD }}"
 
     - name: "Delete sandbox instance koha git clone"
       file:
