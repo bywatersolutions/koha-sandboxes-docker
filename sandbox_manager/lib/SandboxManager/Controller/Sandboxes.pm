@@ -371,7 +371,9 @@ sub max_sandboxes_reached {
     my $count = () = readdir($dh);
     closedir($dh);
 
-    return $count >= $user_vars->{MAX_SANDBOXES};
+    # Add 2 to account for `.` and `..`
+    my $max = $user_vars->{MAX_SANDBOXES} + 2;
+    return $count >= $max;
 }
 
 1;
