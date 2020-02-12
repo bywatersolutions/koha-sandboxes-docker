@@ -47,14 +47,16 @@ sub create_form {
 sub create_submit {
     my $self = shift;
 
+    my $name        = $self->param('name');
+
     if ( lc($self->param('captcha')) ne 'koha' ) {
+        $self->app->log->info("Someone failed the captcha on create_submit for $name");
         $self->render( text => 'Failed captcha', status => 403 );
 	return;
     }
 
     $self->redirect_to('/') if $self->max_sandboxes_reached;
 
-    my $name        = $self->param('name');
     my $description = $self->param('description');
     my $notes       = $self->param('notes');
     my $user        = $self->param('user');
@@ -79,6 +81,9 @@ sub create_submit {
 
     }
     else {
+
+        $self->app->log->info("Someone called create_submit with $name");
+
         my $lifetime_hours = $user_vars->{SB_LIFETIME_HOURS};
         my $expiration = $lifetime_hours ? DateTime->now()->add( hours => $lifetime_hours )->datetime(q{ }) : undef;
         my $created_on = DateTime->now()->datetime(q{ });
@@ -109,6 +114,7 @@ sub renew {
     my $self = shift;
 
     my $name = $self->param('name');
+    $self->app->log->info("Someone called renew on $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -132,6 +138,7 @@ sub signoff_form {
     my $self = shift;
 
     my $name = $self->param('name');
+    $self->app->log->info("Someone called signoff_form on $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -146,12 +153,14 @@ sub signoff_form {
 sub signoff_submit {
     my $self = shift;
 
+    my $name   = $self->param('name');
+
     if ( lc($self->param('captcha')) ne 'koha' ) {
+        $self->app->log->info("Someone failed the captcha on signoff_submit for $name");
         $self->render( text => 'Failed captcha', status => 403 );
 	return;
     }
 
-    my $name   = $self->param('name');
     my $user   = $self->param('user');
     my $email  = $self->param('email');
     my $bug    = $self->param('bug');
@@ -175,6 +184,7 @@ sub apply_bug_form {
     my $self = shift;
 
     my $name = $self->param('name');
+    $self->app->log->info("Someone called apply_bug_form for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -191,6 +201,7 @@ sub apply_bug_submit {
 
     my $name = $self->param('name');
     my $bug = $self->param('bug');
+    $self->app->log->info("Someone called apply_bug_submit for $name with $bug");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -212,6 +223,7 @@ sub apply_bug_submit {
 sub rebuild_dbic {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called rebuild_dbic for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -227,6 +239,7 @@ sub rebuild_dbic {
 sub build_css {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called rebuild_css for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -243,7 +256,16 @@ sub build_css {
 
 sub delete {
     my $self = shift;
+
     my $name = $self->stash('name');
+
+    if ( lc($self->param('captcha')) ne 'koha' ) {
+        $self->app->log->info("Someone failed the captcha on create_submit for $name");
+        $self->render( text => 'Failed captcha', status => 403 );
+	return;
+    }
+
+    $self->app->log->info("Someone called delete for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -257,6 +279,7 @@ sub delete {
 sub restart_all {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called restart_all for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -275,6 +298,7 @@ sub restart_all {
 sub reindex_full {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called reindex_all for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -290,6 +314,7 @@ sub reindex_full {
 sub clear_database {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called clear_database for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -310,6 +335,7 @@ sub clear_database {
 sub provision_log {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called provision_log for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -327,6 +353,7 @@ sub provision_log {
 sub docker_log {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called docker_log for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -339,6 +366,7 @@ sub koha_log {
     my $self = shift;
     my $name = $self->stash('name');
     my $file = $self->stash('file');
+    $self->app->log->info("Someone called koha_log for $name with $file");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
@@ -358,6 +386,7 @@ sub koha_log {
 sub git_log {
     my $self = shift;
     my $name = $self->stash('name');
+    $self->app->log->info("Someone called git_log for $name");
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
