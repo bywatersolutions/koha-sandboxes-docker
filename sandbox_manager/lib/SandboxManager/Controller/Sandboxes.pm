@@ -169,9 +169,9 @@ sub signoff_submit {
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
     my $output = q{};
-    qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash" };
-    $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number $bug" } . "\n";
-    qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash pop" };
+    qx{ docker exec -t koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash" };
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "cd /kohadevbox/koha && git s $number && yes | git bza2 $number $bug" } . "\n";
+    qx{ docker exec -t koha-$name /bin/bash -c "cd /kohadevbox/koha && git stash pop" };
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
@@ -210,8 +210,8 @@ sub apply_bug_submit {
     DumpFile( "$config_dir/$name.yml", $sandbox );
 
     my $output = q{};
-    $output .= qx{ docker exec koha-$name /bin/bash -c "cd /kohadevbox/koha && yes | git bz apply $bug" } . "\n";
-    $output .= qx{ docker exec koha-$name /bin/bash -c "perl koha/installer/data/mysql/updatedatabase.pl" } . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "cd /kohadevbox/koha && yes | git bz apply $bug" } . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "perl koha/installer/data/mysql/updatedatabase.pl" } . "\n";
 
     $self->render(
         title  => "Koha Sandbox Manager - Sign off patches",
@@ -227,7 +227,7 @@ sub rebuild_dbic {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "/kohadevbox/bin/dbic" } . "\n";
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "/kohadevbox/bin/dbic" } . "\n";
 
     $self->render(
         title  => "Full DBIC Schema Rebuild",
@@ -243,9 +243,9 @@ sub build_css {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "(cd koha; yarn install)" } . "\n";
-    $output .= qx{ docker exec koha-$name /bin/bash -c "(cd koha; yarn build)" } . "\n";
-    $output .= qx{ docker exec koha-$name /bin/bash -c "(cd koha; yarn build --view=opac)" } . "\n";
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "(cd koha; yarn install)" } . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "(cd koha; yarn build)" } . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "(cd koha; yarn build --view=opac)" } . "\n";
 
     $self->render(
         title  => "Rebuild of css from scss",
@@ -283,9 +283,9 @@ sub restart_all {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "service koha-common stop" }   . "\n";
-    $output   .=  qx{ docker exec koha-$name /bin/bash -c "service koha-common start" } . "\n";
-    $output   .=  qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "service koha-common stop" }   . "\n";
+    $output   .=  qx{ docker exec -t koha-$name /bin/bash -c "service koha-common start" } . "\n";
+    $output   .=  qx{ docker exec -t koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
     $output   .= qx{ docker restart memcached } . "\n";
 
     $self->render(
@@ -302,7 +302,7 @@ sub reindex_full {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-rebuild-zebra -f -v $name" } . "\n";
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "koha-rebuild-zebra -f -v $name" } . "\n";
 
     $self->render(
         title  => "Full Zebra Reindex",
@@ -318,10 +318,10 @@ sub clear_database {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec koha-$name /bin/bash -c "koha-mysql $name <<< 'DROP DATABASE koha_$name; CREATE DATABASE koha_$name;'" } . "\n";
-    $output .= qx{ docker exec koha-$name /bin/bash -c "service koha-common stop" }  . "\n";
-    $output .= qx{ docker exec koha-$name /bin/bash -c "service koha-common start" } . "\n";
-    $output .= qx{ docker exec koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "koha-mysql $name <<< 'DROP DATABASE koha_$name; CREATE DATABASE koha_$name;'" } . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "service koha-common stop" }  . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "service koha-common start" } . "\n";
+    $output .= qx{ docker exec -t koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
     $output .= qx{ docker restart memcached } . "\n";
     $output .= qq{ Koha should now show the web installer. The username will be 'koha_$name' with the password 'password' } . "\n";
 
@@ -378,7 +378,7 @@ sub koha_log {
 
     $self->redirect_to('/') unless $filename;
 
-    my $text = qx{ docker exec koha-$name cat $filename };
+    my $text = qx{ docker exec -t koha-$name cat $filename };
 
     $self->render( title => "Koha log", text => $text, format => 'txt' );
 }
@@ -390,7 +390,7 @@ sub git_log {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $text = qx{ docker exec koha-$name bash -c "cd /kohadevbox/koha && git log HEAD~50..HEAD" };
+    my $text = qx{ docker exec -t koha-$name bash -c "cd /kohadevbox/koha && git log HEAD~50..HEAD" };
 
     $self->render( title => "Koha git log", text => $text, format => 'txt' );
 }
