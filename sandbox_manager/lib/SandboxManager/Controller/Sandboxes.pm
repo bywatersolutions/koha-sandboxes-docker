@@ -390,7 +390,7 @@ sub git_log {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $text = qx{ docker exec -t koha-$name bash -c "cd /kohadevbox/koha && git log HEAD~50..HEAD" };
+    my $text = qx{ docker exec koha-$name bash -c "cd /kohadevbox/koha && git log HEAD~50..HEAD" };
 
     $self->render( title => "Koha git log", text => $text, format => 'txt' );
 }
