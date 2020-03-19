@@ -227,7 +227,7 @@ sub rebuild_dbic {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $output = qx{ docker exec -t koha-$name /bin/bash -c "/kohadevbox/bin/dbic" } . "\n";
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "(cd koha; misc/devel/update_dbix_class_files.pl --db_name=koha_$name --db_host=db --db_user=koha_$name --db_passwd=$user_vars->{KOHA_DB_PASSWORD})" } . "\n";
 
     $self->render(
         title  => "Full DBIC Schema Rebuild",
