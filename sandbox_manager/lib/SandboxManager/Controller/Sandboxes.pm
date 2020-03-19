@@ -63,6 +63,7 @@ sub create_submit {
     my $email       = $self->param('email');
     my $password    = $self->param('password');
     my $bug         = $self->param('bug');
+    my $marcflavour = $self->param('marcflavour') || 'marc21';
     my $git_remote  = $self->param('git_remote');
     my $git_branch  = $self->param('git_branch');
 
@@ -96,6 +97,7 @@ sub create_submit {
                 GIT_USER_NAME  => $user,
                 KOHA_CONF      => "/etc/koha/sites/$name/koha-conf.xml",
                 BUG_NUMBER     => $bug,
+                KOHA_MARC_FLAVOUR => $marc_flavour,
                 GIT_REMOTE     => $git_remote,
                 GIT_BRANCH     => $git_branch,
                 NOTES          => $notes,

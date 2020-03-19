@@ -24,7 +24,7 @@
 
     <form id="create-sandbox" method="post" action="[% c.url_for('/create') %]">
       <div class="form-group">
-        <label for="name">Your name</label>
+        <label for="user">Your name</label>
         <input type="text" class="form-control" name="user" id="user" aria-describedby="userHelp" placeholder="Enter your name" value="[% params.user | html %]" required>
         <small id="nameHelp" class="form-text text-muted">Enter your name ( or alias, nick or whatever ). This will be used for signing off on patches.</small>
       </div>
@@ -45,6 +45,20 @@
         <label for="bug">Bug number</label>
         <input type="number" class="form-control" name="bug" id="bug" aria-describedby="bugHelp" placeholder="Enter Koha community bug number" pattern="[0-9]+" value="[% params.bug | html %]">
         <small id="bugHelp" class="form-text text-muted">Enter a bug number here and it will be applied to your sandbox.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="marcflavour">Marc flavour</label>
+        <select class="form-control" name="marcflavour" id="marcflavour" aria-describedby="bugHelp">
+            [% IF params.marcflavour == 'unimarc' %]
+                <option value="marc21">MARC21</option>
+                <option value="unimarc" selected="selected">UNIMARC</option>
+            [% ELSE %]
+                <option value="marc21" selected="selected">MARC21</option>
+                <option value="unimarc">UNIMARC</option>
+            [% END %]
+        </select>
+        <small id="bugHelp" class="form-text text-muted">Select your MARC flavour.</small>
       </div>
 
       <div class="form-group">
