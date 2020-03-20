@@ -13,6 +13,8 @@ sub startup {
     #$self->plugin('PODRenderer') if $config->{perldoc};
     #PODRenderer is DEPRECATED
 
+    $self->log( Mojo::Log->new( path => '/var/log/sandbox_manager.log', level => 'debug' ) );
+
     $self->plugin('TemplateToolkit');
     $self->plugin( TemplateToolkit => { template => { INTERPOLATE => 1 } } );
     $self->renderer->default_handler('tt2');

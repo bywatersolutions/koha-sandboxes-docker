@@ -57,15 +57,15 @@ sub create_submit {
 
     $self->redirect_to('/') if $self->max_sandboxes_reached;
 
-    my $description = $self->param('description');
-    my $notes       = $self->param('notes');
-    my $user        = $self->param('user');
-    my $email       = $self->param('email');
-    my $password    = $self->param('password');
-    my $bug         = $self->param('bug');
-    my $marcflavour = $self->param('marcflavour') || 'marc21';
-    my $git_remote  = $self->param('git_remote');
-    my $git_branch  = $self->param('git_branch');
+    my $description  = $self->param('description');
+    my $notes        = $self->param('notes');
+    my $user         = $self->param('user');
+    my $email        = $self->param('email');
+    my $password     = $self->param('password');
+    my $bug          = $self->param('bug');
+    my $marc_flavour = $self->param('marc_flavour') || 'marc21';
+    my $git_remote   = $self->param('git_remote');
+    my $git_branch   = $self->param('git_branch');
 
     my $errors = {};
     $errors->{name_required}  = 1 unless $name;
@@ -92,20 +92,20 @@ sub create_submit {
         DumpFile(
             "$config_dir/$name.yml",
             {
-                KOHA_INSTANCE  => $name,
-                GIT_USER_EMAIL => $email,
-                GIT_USER_NAME  => $user,
-                KOHA_CONF      => "/etc/koha/sites/$name/koha-conf.xml",
-                BUG_NUMBER     => $bug,
+                KOHA_INSTANCE     => $name,
+                GIT_USER_EMAIL    => $email,
+                GIT_USER_NAME     => $user,
+                KOHA_CONF         => "/etc/koha/sites/$name/koha-conf.xml",
+                BUG_NUMBER        => $bug,
                 KOHA_MARC_FLAVOUR => $marc_flavour,
-                GIT_REMOTE     => $git_remote,
-                GIT_BRANCH     => $git_branch,
-                NOTES          => $notes,
-                DESCRIPTION    => $description,
-                PASSWORD       => $password,
-                CREATED_ON     => $created_on,
-                EXPIRATION     => $expiration,
-		RENEWALS       => 0,
+                GIT_REMOTE        => $git_remote,
+                GIT_BRANCH        => $git_branch,
+                NOTES             => $notes,
+                DESCRIPTION       => $description,
+                PASSWORD          => $password,
+                CREATED_ON        => $created_on,
+                EXPIRATION        => $expiration,
+                RENEWALS          => 0,
             }
         );
         $self->redirect_to('/');

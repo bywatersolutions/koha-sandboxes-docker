@@ -31,7 +31,7 @@
               </li>
               [% IF view == 'list' %]
                   <li class="nav-item">
-                      [% IF sandboxes.size >= user_vars.MAX_SANDBOXES %]
+                      [% IF sandboxes.size && user_vars.MAX_SANDBOXES && sandboxes.size >= user_vars.MAX_SANDBOXES %]
                           <a class="nav-link" href="#" title="The maximum number of sandboxes have been created. A sandbox must be deleted before a new one can be created"><s>Create</s></a>
                       [% ELSE %]
                         <a class="nav-link" href="/create">Create</a>

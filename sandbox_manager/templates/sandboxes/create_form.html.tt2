@@ -48,9 +48,9 @@
       </div>
 
       <div class="form-group">
-        <label for="marcflavour">Marc flavour</label>
-        <select class="form-control" name="marcflavour" id="marcflavour" aria-describedby="bugHelp">
-            [% IF params.marcflavour == 'unimarc' %]
+        <label for="marc_flavour">Marc flavour</label>
+        <select class="form-control" name="marc_flavour" id="marc_flavour" aria-describedby="bugHelp">
+            [% IF params.marc_flavour == 'unimarc' %]
                 <option value="marc21">MARC21</option>
                 <option value="unimarc" selected="selected">UNIMARC</option>
             [% ELSE %]
