@@ -190,7 +190,7 @@
       docker_container:
         name: db
         state: present
-        image: mariadb:10.1
+        image: mariadb:10.3
         pull: yes
         restart: yes
         restart_policy: always
