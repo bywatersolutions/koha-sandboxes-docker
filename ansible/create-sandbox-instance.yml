@@ -220,6 +220,17 @@
         name: root
         password: "{{ KOHA_SSH_PASSWORD | password_hash('sha512') }}"
 
+    - name: "Install Postfix MTA"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      apt:
+        name: postfix
+        update_cache: yes
+        state: present
+      ignore_errors: yes
+    - name: "Enable smtp-sink for mail"
+      delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      shell: "smtp-sink -u root -D mail 127.0.0.1:25 100"
+
     - name: "Index the records for the first time"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
       shell: "koha-rebuild-zebra -f -a -b -v {{ KOHA_INSTANCE }}"

@@ -397,6 +397,17 @@ sub git_log {
     $self->render( title => "Koha git log", text => $text, format => 'txt' );
 }
 
+sub mail_log {
+    my $self = shift;
+    my $name = $self->stash('name');
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $text = qx{ docker exec koha-$name bash -c "cat /root/mail" };
+
+    $self->render( title => "Koha mail log", text => $text, format => 'txt' );
+}
+
 sub max_sandboxes_reached {
     opendir( my $dh, $config_dir );
     my $count = () = readdir($dh);
