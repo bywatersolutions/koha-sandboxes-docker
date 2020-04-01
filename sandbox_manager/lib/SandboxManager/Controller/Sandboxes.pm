@@ -403,7 +403,7 @@ sub mail_log {
 
     $self->redirect_to('/') unless -f "$config_dir/$name.yml";
 
-    my $text = qx{ docker exec koha-$name bash -c "cat /root/mail" };
+    my $text = qx{ docker exec koha-$name bash -c "cat /kohadevbox/mail" };
 
     $self->render( title => "Koha mail log", text => $text, format => 'txt' );
 }

@@ -229,7 +229,7 @@
       ignore_errors: yes
     - name: "Enable smtp-sink for mail"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
-      shell: "smtp-sink -u root -D mail 127.0.0.1:25 100"
+      shell: "nohup smtp-sink -u root -D mail 127.0.0.1:25 100 </dev/null >/dev/null 2>&1 &"
 
     - name: "Index the records for the first time"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
