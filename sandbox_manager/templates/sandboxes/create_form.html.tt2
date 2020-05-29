@@ -67,6 +67,9 @@
         <br/>
         <input type="text" class="form-control" name="git_branch" id="git_branch" aria-describedby="git_branchHelp" placeholder="Enter name of branch" value="[% params.git_branch | html %]">
         <small id="git_remoteHelp" class="form-text text-muted">Enter a Koha git remote address and branch here and it will be applied to your sandbox.</small>
+        <br/>
+        <input type="text" class="form-control" name="git_commitid" id="git_commitid" aria-describedby="git_commitidHelp" placeholder="Enter commit id or tag name">
+        <small id="git_commitidHelp" class="form-text text-muted">Or enter a commit id or a tag name to checkout.</small>
       </div>
 
       <div class="form-group">

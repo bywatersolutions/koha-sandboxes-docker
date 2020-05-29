@@ -66,6 +66,7 @@ sub create_submit {
     my $marc_flavour = $self->param('marc_flavour') || 'marc21';
     my $git_remote   = $self->param('git_remote');
     my $git_branch   = $self->param('git_branch');
+    my $git_commitid = $self->param('git_commitid');
 
     my $errors = {};
     $errors->{name_required}  = 1 unless $name;
@@ -100,6 +101,7 @@ sub create_submit {
                 KOHA_MARC_FLAVOUR => $marc_flavour,
                 GIT_REMOTE        => $git_remote,
                 GIT_BRANCH        => $git_branch,
+		GIT_COMMITID      => $git_commitid,
                 NOTES             => $notes,
                 DESCRIPTION       => $description,
                 PASSWORD          => $password,
