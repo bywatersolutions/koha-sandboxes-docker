@@ -122,6 +122,7 @@
             KOHA_PROVE_CPUS: "{{ KOHA_PROVE_CPUS }}"
             KOHA_USER: "{{ KOHA_USER }}"
             PERL5LIB: "{{ PERL5LIB }}"
+            SYNC_REPO: "/usr/local/src/koha-sandboxes/{{ KOHA_INSTANCE }}"
             #REMOTE_DEBUGGER_DIR: "{{ REMOTE_DEBUGGER_DIR }}"
             #REMOTE_DEBUGGER_KEY: "{{ REMOTE_DEBUGGER_KEY }}"
             #REMOTE_DEBUGGER_LOCATION: "{{ REMOTE_DEBUGGER_LOCATION }}"
