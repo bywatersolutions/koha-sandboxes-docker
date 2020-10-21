@@ -163,9 +163,9 @@
         state: link
       notify: "Restart apache"
 
-    - name: "Pausing for 1 minute whilst container sets itself up"
+    - name: "Pausing for 2 minutes whilst container sets itself up"
       pause:
-        minutes: 1
+        minutes: 2
 
     - name: "Add docker container koha-{{ KOHA_INSTANCE }} to ansible hosts"
       add_host:
