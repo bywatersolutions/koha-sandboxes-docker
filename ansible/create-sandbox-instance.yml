@@ -168,14 +168,20 @@
         minutes: 2
 
     - name: "Add docker container koha-{{ KOHA_INSTANCE }} to ansible hosts"
-      add_host:
+      ansible.builtin.add_host:
         name: "koha-{{ KOHA_INSTANCE }}"
         groups: koha
         ansible_connection: docker
+        ansible_user: root
+        ansible_become: true
       changed_when: false
 
     - debug:
         msg: "GIT_REMOTE is set to {{ GIT_REMOTE }}"
+
+    - name: "Pausing for another minute"
+      pause:
+        minutes: 1
 
     - name: "Test connection to docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
