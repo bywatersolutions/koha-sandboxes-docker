@@ -27,10 +27,12 @@
 
     - name: "Restart plack in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
 
     - name: "Run updatedatabase.pl in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "koha-shell -c '/kohadevbox/koha/installer/data/mysql/updatedatabase.pl' {{ KOHA_INSTANCE }}"
 
   vars_files:
@@ -179,6 +181,7 @@
 
     - name: "Test connection to docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "cd /kohadevbox && ls -alh"
       ignore_errors: yes
       register: connection_test
@@ -188,12 +191,14 @@
 
     - name: "Add git remote {{ GIT_REMOTE }} as {{ KOHA_INSTANCE }} in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "cd /kohadevbox/koha && git remote add {{ KOHA_INSTANCE }} {{ GIT_REMOTE }} && git fetch {{ KOHA_INSTANCE }}"
       when: not( (GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == ''))
       ignore_errors: yes
 
     - name: "git checkout commit_id or tag {{ GIT_COMMITID }} in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "cd /kohadevbox/koha && git checkout {{ GIT_COMMITID }}"
       when: not( (GIT_COMMITID is undefined) or (GIT_COMMITID is none) or (GIT_COMMITID | trim == '') )
       ignore_errors: yes
@@ -203,6 +208,7 @@
 
     - name: "git checkout {{ KOHA_INSTANCE }}/{{ GIT_BRANCH }} in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "cd /kohadevbox/koha && git checkout {{KOHA_INSTANCE}}/{{ GIT_BRANCH }}"
       when: not( (GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '') )
       ignore_errors: yes
@@ -212,6 +218,7 @@
 
     - name: "Checkout origin/master in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "cd /kohadevbox/koha && git checkout origin/master"
       when: ((GIT_REMOTE is undefined) or (GIT_REMOTE is none) or (GIT_REMOTE | trim == '')) and ((GIT_BRANCH is undefined) or (GIT_BRANCH is none) or (GIT_BRANCH | trim == '')) and ((GIT_COMMITID is undefined) or (GIT_COMMITID is none) or (GIT_COMMITID | trim == ''))
       ignore_errors: no
@@ -221,6 +228,7 @@
 
     - name: "Apply bug {{ BUG_NUMBER }} via git-bz in docker container"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "cd /kohadevbox/koha && yes | git bz apply {{ BUG_NUMBER }}"
       when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
       ignore_errors: no
@@ -230,6 +238,7 @@
 
     - name: "Install OpenSSH Server"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       apt:
         name: openssh-server
         update_cache: yes
@@ -237,19 +246,23 @@
       ignore_errors: yes
     - name: "Enable PermitRootLogin for sshd"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config"
     - name: "Start sshd"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "/etc/init.d/ssh start"
       # Service module fails to start ssh and I don't know why
     - name: Set root password to 'koha'
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       user:
         name: root
         password: "{{ KOHA_SSH_PASSWORD | password_hash('sha512') }}"
 
     - name: "Install Postfix MTA"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       apt:
         name: postfix
         update_cache: yes
@@ -257,18 +270,22 @@
       ignore_errors: yes
     - name: "Enable smtp-sink for mail"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "nohup smtp-sink -u root -D mail 127.0.0.1:25 100 </dev/null >/dev/null 2>&1 &"
 
     - name: "Index the records for the first time"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "koha-rebuild-zebra -f -a -b -v {{ KOHA_INSTANCE }}"
       ignore_errors: yes
     - name: "Restart Zebra after indexing records"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "koha-zebra --restart {{ KOHA_INSTANCE }}"
       ignore_errors: yes
     - name: "Restart Plack after indexing records"
       delegate_to: "koha-{{ KOHA_INSTANCE }}"
+      connection: docker
       shell: "koha-plack --restart {{ KOHA_INSTANCE }}"
       ignore_errors: yes
 
