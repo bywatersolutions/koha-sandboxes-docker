@@ -123,7 +123,7 @@
 
     - name: "Clone koha source to /usr/local/src/koha"
       git:
-        repo: git://git.koha-community.org/koha.git
+        repo: https://git.koha-community.org/Koha-community/Koha.git
         dest: /usr/local/src/koha
         accept_hostkey: yes
       notify: 
