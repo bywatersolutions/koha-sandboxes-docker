@@ -46,7 +46,7 @@
 
     - name: "Clone koha source to /usr/local/src/koha"
       git:
-        repo: git://git.koha-community.org/koha.git
+        repo: https://git.koha-community.org/Koha-community/Koha.git
         dest: /usr/local/src/koha
         accept_hostkey: yes
         update: yes
@@ -231,7 +231,6 @@
       connection: docker
       shell: "cd /kohadevbox/koha && yes | git bz apply {{ BUG_NUMBER }}"
       when: not( (BUG_NUMBER is undefined) or (BUG_NUMBER is none) or (BUG_NUMBER | trim == '') )
-      ignore_errors: no
       notify:
         - "Restart plack in docker container"
         - "Run updatedatabase.pl in docker container"
