@@ -19,7 +19,7 @@
         mode: 365
         owner: root
         src: files/git/config
-        update: yes
+        force: yes
       notify:
         - "Update koha git repo"
     -
