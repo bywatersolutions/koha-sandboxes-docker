@@ -224,6 +224,44 @@ sub apply_bug_submit {
     );
 }
 
+sub install_translation_form {
+    my $self = shift;
+
+    my $name = $self->param('name');
+    $self->app->log->info("Someone called install_translation_form for $name");
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $sandbox = LoadFile("$config_dir/$name.yml");
+
+    $self->render(
+        title   => "Koha Sandbox Manager - Install translation",
+        sandbox => $sandbox
+    );
+}
+
+sub install_translation_submit {
+    my $self = shift;
+
+    my $name = $self->param('name');
+    my $translation = $self->param('translation');
+    $self->app->log->info("Someone called apply_translation_submit for $name with $translation");
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "(cd koha; ./misc/translator/translate install -v $translation)" } . "\n";
+    $output   .= qx{ docker exec -t koha-$name /bin/bash -c "service koha-common stop" }   . "\n";
+    $output   .= qx{ docker exec -t koha-$name /bin/bash -c "service koha-common start" } . "\n";
+    $output   .= qx{ docker exec -t koha-$name /bin/bash -c "service apache2 reload" }    . "\n";
+    $output   .= qx{ docker restart memcached } . "\n";
+
+    $self->render(
+        title  => "Koha Sandbox Manager - Translation installed",
+        text   => $output,
+        format => 'txt'
+    );
+}
+
 sub rebuild_dbic {
     my $self = shift;
     my $name = $self->stash('name');

@@ -42,6 +42,8 @@ sub startup {
     $r->any('/rebuild_dbic/:name')->to('sandboxes#rebuild_dbic');
     $r->any('/build_css/:name')->to('sandboxes#build_css');
     $r->any('/clear_database/:name')->to('sandboxes#clear_database');
+    $r->get('/install_translation/:name')->to('sandboxes#install_translation_form');
+    $r->post('/install_translation/:name')->to('sandboxes#install_translation_submit');
 }
 
 1;
