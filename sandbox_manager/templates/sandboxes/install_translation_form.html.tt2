@@ -10,6 +10,8 @@
             <option value="fr-FR">French</option>
             <option value="de-DE">German</option>
             <option value="es-ES">Spanish</option>
+            <option value="nl-NL">Dutch</option>
+            <option value="el-GR">Greek</option>
         </select>
       </div>
 
