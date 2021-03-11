@@ -85,6 +85,7 @@
                             <div class="dropdown-menu" aria-labelledby="btnGroupDropActions">
                                 <a class="dropdown-item" target="_blank" href="/restart_all/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-sync"></i> Restart services</a>
                                 <a class="dropdown-item" target="_blank" href="/reindex_full/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Full Zebra Reindex</a>
+                                <a class="dropdown-item" target="_blank" href="/reindex_es/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Full Elastic Reindex</a>
                                 <a class="dropdown-item" target="_blank" href="/build_css/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Build CSS</a>
                                 <a class="dropdown-item" target="_blank" href="/install_translation/[% s.KOHA_INSTANCE | html %]"><i class="fas fa-file-alt"></i> Install translations</a>
                                 <div class="dropdown-divider"></div>

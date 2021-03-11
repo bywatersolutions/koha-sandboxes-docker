@@ -353,6 +353,22 @@ sub reindex_full {
     );
 }
 
+sub reindex_es {
+    my $self = shift;
+    my $name = $self->stash('name');
+    $self->app->log->info("Someone called reindex_es for $name");
+
+    $self->redirect_to('/') unless -f "$config_dir/$name.yml";
+
+    my $output = qx{ docker exec -t koha-$name /bin/bash -c "koha-elasticsearch --rebuild -d -v $name" } . "\n";
+
+    $self->render(
+        title  => "Full Elastic Reindex",
+        text   => $output,
+        format => 'txt'
+    );
+}
+
 sub clear_database {
     my $self = shift;
     my $name = $self->stash('name');
