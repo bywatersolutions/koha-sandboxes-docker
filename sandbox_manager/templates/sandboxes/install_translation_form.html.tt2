@@ -1,0 +1,26 @@
+[% INCLUDE wrapper_top.html.tt2 %]
+
+<div class="container">
+    <h2>Install translation to sandbox</h2>
+
+    <form id="create-sandbox" method="post" action="[% c.url_for('/install_translation') | html %]/[% sandbox.KOHA_INSTANCE | html %]">
+      <div class="form-group">
+        <label for="translation">Translation</label>
+        <select name="translation" class="form-control" id="translation" aria-describedby="translationHelp" required />
+            <option value="fr-FR">French</option>
+            <option value="de-DE">German</option>
+            <option value="es-ES">Spanish</option>
+            <option value="nl-NL">Dutch</option>
+            <option value="el-GR">Greek</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("translation").focus();
+</script>
+
+[% INCLUDE wrapper_bottom.html.tt2 %]

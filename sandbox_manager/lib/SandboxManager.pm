@@ -39,9 +39,12 @@ sub startup {
     $r->any('/delete/:name')->to('sandboxes#delete');
     $r->any('/restart_all/:name')->to('sandboxes#restart_all');
     $r->any('/reindex_full/:name')->to('sandboxes#reindex_full');
+    $r->any('/reindex_es/:name')->to('sandboxes#reindex_es');
     $r->any('/rebuild_dbic/:name')->to('sandboxes#rebuild_dbic');
     $r->any('/build_css/:name')->to('sandboxes#build_css');
     $r->any('/clear_database/:name')->to('sandboxes#clear_database');
+    $r->get('/install_translation/:name')->to('sandboxes#install_translation_form');
+    $r->post('/install_translation/:name')->to('sandboxes#install_translation_submit');
 }
 
 1;

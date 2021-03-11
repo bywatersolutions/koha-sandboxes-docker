@@ -51,7 +51,7 @@
       apt:
         name: cpanminus
 
-    - name: Install "default-libmysqlclient-dev" package, needed for pip package "MySQL-python"
+    - name: Install "default-libmysqlclient-dev" package, needed for pip package "mysqlclient"
       apt:
         name: default-libmysqlclient-dev
 
@@ -158,7 +158,7 @@
         state: present
 
     - pip:
-        name: MySQL-python
+        name: mysqlclient
         state: present
 
     - name: Create docker network kohanet
