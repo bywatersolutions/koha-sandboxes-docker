@@ -38,6 +38,10 @@
     - name: Install "git" package
       apt:
         name: git
+
+    - name: Install "pip 3" package
+      apt:
+        name: python3-pip
 #        update_cache: yes
 
   tasks:
