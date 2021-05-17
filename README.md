@@ -1,3 +1,7 @@
+# This project has moved to the official [Koha Community GitLab](https://gitlab.com/koha-community/koha-sandboxes-docker)!
+
+This GitHub repo is archived and will no longer be actively maintained. It will remove here for posterity and to preserve existing hyperlinks.
+
 # Koha Sandbox Server
 
 The Koha Sandbox Server is a system to allow easy testing of Koha patches and git branches.
